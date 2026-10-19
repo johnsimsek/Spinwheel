@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Tattoo Of The Day</title>
+
+<style>
+*{ box-sizing:border-box; }
+html, body{ height:100%; }
+
+body{
+  margin:0;
+  background:#fff; /* ✅ keep white */
+  font-family:Arial, sans-serif;
+  color:#111;
+  min-height:100vh;
+  overflow:hidden; /* ✅ stop inner scrolling */
+}
+
+/* ✅ white shaded layer behind everything (keeps your page white) */
+#whiteShadeBg{
+  position:fixed;
+  inset:0;
+  background:#ffffff;
+  background-image:
+    radial-gradient(900px 420px at 50% -160px, rgba(0,0,0,.06), rgba(0,0,0,0) 60%),
+    radial-gradient(700px 360px at 50% 120%, rgba(0,0,0,.04), rgba(0,0,0,0) 60%);
+  z-index:-1;
+}
+
+/* ===== POPUP OVERLAY ===== */
+#overlayBg{
+  position:fixed;
+  inset:0;
+
+  /* ✅ CHANGE: light overlay (this removes the grey you saw) */
+  background:rgba(255,255,255,.78);
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+
+  display:none;
+  justify-content:center;
+
+  /* ✅ popup higher (no need to scroll up) */
+  align-items:flex-start;
+
+  /* ✅ fixed viewport height inside iframe */
+  height:100svh;
+  width:100%;
+
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
+
+  z-index:99999;
+
+  /* ✅ no scrolling on overlay itself */
+  overflow:hidden;
+
+  transition: background .22s ease, backdrop-filter .22s ease;
+}
+
+#popup{
+  width:100%;
+  max-width:440px;
+  position:relative;
+
+  /* ✅ popup can scroll internally if needed */
+  max-height: calc(100svh - 28px);
+  overflow:auto;
+  -webkit-overflow-scrolling: touch;
+
+  /* ✅ small top gap */
+  margin-top:6px;
+
+  transform: translateY(18px) scale(.96);
+  opacity:0;
+  transition: opacity .25s ease, transform .25s ease;
+}
+
+#overlayBg.show #popup{
+  opacity:1;
+  transform: translateY(0) scale(1);
+}
+
+#closePopup{
+  position:absolute;
+  top:10px;
+  right:10px;
+  width:44px;
+  height:44px;
+  border-radius:999px;
+  background:rgba(0,0,0,.65);
+  border:1px solid rgba(255,255,255,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+  cursor:pointer;
+  color:#fff;
+  z-index:100000;
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+}
+#closePopup:hover{ background:rgba(0,0,0,.85); }
+
+/* ===== POPUP CARD ===== */
+.box{
+  width:100%;
+  background:#141420;
+  padding:16px;
+  border-radius:18px;
+  box-shadow:0 30px 80px rgba(0,0,0,.75);
+  border:1px solid rgba(255,255,255,.06);
+  overflow:auto;
+  color:#fff;
+}
+
+h2{ text-align:center; margin:8px 0 14px; font-size:26px; }
+
+.imgWrap{
+  border:1px solid #2a2a3a;
+  border-radius:14px;
+  overflow:hidden;
+  background:#0f0f16;
+  aspect-ratio:1/1;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  max-height:52vh;
+}
+
+img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  opacity:0;
+  transition:.3s;
+}
+img.show{ opacity:1; }
+
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+  pointer-events:none;
+}
+
+.btn{
+  pointer-events:auto;
+  border:none;
+  border-radius:12px;
+  padding:12px 14px;
+  font-weight:800;
+  cursor:pointer;
+  width:100%;
+  max-width:260px;
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  transition:.25s;
+  position:relative;
+  overflow:hidden;
+}
+
+/* ===== ✅ SPIN BUTTON UPGRADE ===== */
+#spinBtn{
+  background: radial-gradient(120% 120% at 30% 20%, #ffffff 0%, #efefef 45%, #d9d9d9 100%);
+  color:#111;
+  border: 1px solid rgba(0,0,0,.18);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+#spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
+
+#spinBtn:hover{
+  transform: translateY(-1px) scale(1.01);
+  box-shadow:0 16px 40px rgba(0,0,0,.55);
+}
+
+.spinWheel{
+  width:34px;
+  height:34px;
+  border-radius:999px;
+  position:relative;
+  flex:0 0 34px;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      #111 0 18deg,
+      #f2f2f2 18deg 36deg,
+      #111 36deg 54deg,
+      #f2f2f2 54deg 72deg,
+      #111 72deg 90deg,
+      #f2f2f2 90deg 108deg,
+      #111 108deg 126deg,
+      #f2f2f2 126deg 144deg,
+      #111 144deg 162deg,
+      #f2f2f2 162deg 180deg,
+      #111 180deg 198deg,
+      #f2f2f2 198deg 216deg,
+      #111 216deg 234deg,
+      #f2f2f2 234deg 252deg,
+      #111 252deg 270deg,
+      #f2f2f2 270deg 288deg,
+      #111 288deg 306deg,
+      #f2f2f2 306deg 324deg,
+      #111 324deg 342deg,
+      #f2f2f2 342deg 360deg
+    );
+
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.18),
+    inset 0 2px 0 rgba(255,255,255,.75),
+    inset 0 -2px 0 rgba(0,0,0,.08),
+    0 10px 22px rgba(0,0,0,.22);
+
+  animation: wheelIdle 1.4s linear infinite;
+  transform-origin:50% 50%;
+}
+
+/* center hub */
+.spinWheel::before{
+  content:"";
+  position:absolute;
+  inset:9px;
+  border-radius:999px;
+  background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.10),
+    0 0 0 2px rgba(255,255,255,.35);
+}
+
+/* pointer/indicator */
+.spinWheel::after{
+  content:"";
+  position:absolute;
+  top:-5px;
+  left:50%;
+  transform:translateX(-50%);
+  width:0;height:0;
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:10px solid rgba(0,0,0,.85);
+  filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
+}
+
+/* faster while spinning */
+#spinBtn.isSpinning .spinWheel{
+  animation: wheelFast .22s linear infinite;
+}
+
+@keyframes wheelIdle{ to{ transform: rotate(360deg); } }
+@keyframes wheelFast{ to{ transform: rotate(360deg); } }
+/* ===== ✅ END SPIN BUTTON UPGRADE ===== */
+
+#bookBtn{
+  display:none; /* ✅ only show after spin finished */
+  text-decoration:none;
+  text-align:center;
+  color:#111;
+  background:linear-gradient(145deg,#bfbfbf,#8f8f8f,#cfcfcf);
+  border:1px solid #666;
+  letter-spacing:.5px;
+}
+.subscribe{
+  margin-top:10px;
+  font-size:12px;
+  color:#bbb;
+  text-align:center;
+  line-height:1.4;
+}
+
+form{ margin-top:10px; }
+input{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+  outline:none;
+}
+.kirjaudu{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  margin-top:10px;
+  font-weight:800;
+  background:red;
+  color:#fff;
+  cursor:pointer;
+}
+.kirjaudu:disabled{ opacity:.6; cursor:not-allowed; }
+.status{
+  margin-top:8px;
+  font-size:12px;
+  color:#bbb;
+  min-height:16px;
+  text-align:center;
+}
+
+canvas{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:999;
+}
+</style>
+</head>
+
+<body>
+<div id="whiteShadeBg"></div>
+<canvas id="confetti"></canvas>
+
+<div id="overlayBg">
+  <div id="popup">
+    <button id="closePopup" aria-label="Close" type="button">✕</button>
+
+    <div class="box">
+      <h2>🔥 Tattoo Of The Day</h2>
+
+      <div class="imgWrap">
+        <img id="img" alt="Tattoo">
+        <div class="overlay">
+          <button id="spinBtn" class="btn" type="button" aria-label="Spin">
+            <span class="spinWheel" aria-hidden="true"></span>
+            <span>SPIN</span>
+          </button>
+
+          <a id="bookBtn" class="btn" target="_top" rel="noopener"
+             href="https://form.jotform.com/Tattoo_inkyvibestattoo/Ajanvaraus">
+            Varaa Aika Nyt
+          </a>
+        </div>
+      </div>
+
+      <div class="subscribe">
+        Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ve inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
+      </div>
+
+      <iframe name="hidden_iframe" style="display:none;"></iframe>
+
+      <form id="phoneForm" method="POST" target="hidden_iframe"
+            action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
+        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" value="+358 " required>
+        <button id="submitBtn" class="kirjaudu" type="submit">Kirjaudu</button>
+        <div id="status" class="status"></div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ===== POPUP ALWAYS OPEN IMMEDIATELY ===== */
+const overlayBg = document.getElementById("overlayBg");
+const closePopup = document.getElementById("closePopup");
+
+const HOME_URL = "https://www.inkyvibestattoo.com";
+
+function tryGoHome(){
+  // best effort breakout of iframe
+  try { window.top.location.href = HOME_URL; return; } catch (e) {}
+  try { window.parent.location.href = HOME_URL; return; } catch (e) {}
+  window.location.href = HOME_URL;
+}
+
+function openPopup(){
+  overlayBg.style.display = "flex";
+  requestAnimationFrame(() => overlayBg.classList.add("show"));
+
+  // best effort: jump parent page to top (may be blocked)
+  try { window.top.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+  try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+}
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", openPopup);
+} else {
+  openPopup();
+}
+
+/* ✅ X: go to main site */
+closePopup.addEventListener("click", tryGoHome);
+
+/* tap outside closes overlay only */
+overlayBg.addEventListener("click", (e) => { if (e.target === overlayBg) overlayBg.style.display = "none"; });
+
+/* ===== images ===== */
+const LOGO="logo1.jpg";
+const TOTAL=31;
+const tattoos=[...Array(TOTAL)].map((_,i)=>`tattoo${i+1}.jpg`);
+
+const img=document.getElementById("img");
+const spinBtn=document.getElementById("spinBtn");
+const bookBtn=document.getElementById("bookBtn");
+
+/* ===== 24h lock: only after SPIN ===== */
+const KEY="tattoo24";
+const DAY=24*60*60*1000;
+
+img.src=LOGO;
+img.onload=()=>img.classList.add("show");
+
+function setImg(s){
+  img.classList.remove("show");
+  setTimeout(()=>img.src=s,120);
+}
+
+function loadLock(){
+  try{
+    const d=JSON.parse(localStorage.getItem(KEY));
+    if(!d) return null;
+    if(Date.now()>d.until) return null;
+    if(typeof d.i!=="number" || d.i<0 || d.i>=tattoos.length) return null;
+    return d;
+  }catch{return null;}
+}
+function saveLock(i){
+  localStorage.setItem(KEY, JSON.stringify({ i, until: Date.now()+DAY }));
+}
+
+function showBookAfterSpin(){
+  bookBtn.style.display = "block";
+}
+
+/* spin animation */
+function spinAnim(final){
+  spinBtn.disabled=true;
+  spinBtn.classList.add("isSpinning");
+  bookBtn.style.display="none";
+
+  let c=Math.floor(Math.random()*tattoos.length),delay=55;
+  (function step(n){
+    if(n>28){
+      setImg(tattoos[final]);
+      spinBtn.classList.remove("isSpinning");
+      showBookAfterSpin();
+      spinBtn.disabled=false;
+      return;
+    }
+    c=(c+1+Math.floor(Math.random()*3))%tattoos.length;
+    img.src=tattoos[c];
+    img.classList.add("show");
+    delay=Math.round(delay*1.15);
+    setTimeout(()=>step(n+1),delay);
+  })(0);
+}
+
+const locked=loadLock();
+if(locked){
+  setImg(tattoos[locked.i]);
+  showBookAfterSpin();
+}
+
+spinBtn.onclick=()=>{
+  const l=loadLock();
+  if(l){
+    setImg(tattoos[l.i]);
+    showBookAfterSpin();
+    return;
+  }
+  const pick=Math.floor(Math.random()*tattoos.length);
+  saveLock(pick);
+  spinAnim(pick);
+};
+</script>
+
+</body>
+</html>

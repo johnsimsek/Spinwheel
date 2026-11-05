@@ -37,14 +37,10 @@ body{
   -webkit-backdrop-filter:blur(10px);
   display:none;
   justify-content:center;
-  align-items:flex-start;
+  align-items:center;
   height:100svh;
   width:100%;
-  padding:
-    max(14px, env(safe-area-inset-top))
-    max(14px, env(safe-area-inset-right))
-    max(14px, env(safe-area-inset-bottom))
-    max(14px, env(safe-area-inset-left));
+  padding:14px;
   z-index:99999;
   overflow:hidden;
   transition: opacity .25s ease, background .22s ease, backdrop-filter .22s ease;
@@ -52,12 +48,11 @@ body{
 
 #popup{
   width:100%;
-  max-width:440px;
+  max-width:440px; /* Eski genişliğine geri getirildi */
   position:relative;
-  max-height: calc(100svh - 28px);
+  max-height:95svh;
   overflow:auto;
   -webkit-overflow-scrolling: touch;
-  margin-top:6px;
   transform: translateY(18px) scale(.96);
   opacity:0;
   transition: opacity .25s ease, transform .25s ease;
@@ -71,7 +66,7 @@ body{
 .box{
   width:100%;
   background:#141420;
-  padding:16px;
+  padding:16px; /* Eski boşluk değerine geri getirildi */
   border-radius:18px;
   box-shadow:0 30px 80px rgba(0,0,0,.75);
   border:1px solid rgba(255,255,255,.06);
@@ -80,7 +75,7 @@ body{
   color:#fff;
 }
 
-h2{ text-align:center; margin:8px 0 14px; font-size:26px; }
+h2{ text-align:center; margin:4px 0 14px; font-size:26px; }
 
 .imgWrap{
   border:1px solid #2a2a3a;
@@ -92,7 +87,7 @@ h2{ text-align:center; margin:8px 0 14px; font-size:26px; }
   display:flex;
   align-items:center;
   justify-content:center;
-  max-height:52vh;
+  max-height:52vh; /* FOTOĞRAF ALANI ESKİ BOYUTUNA GETİRİLDİ */
 }
 
 img{
@@ -159,32 +154,15 @@ img.show{ opacity:1; }
   background:
     conic-gradient(
       from 0deg,
-      #111 0 18deg,
-      #f2f2f2 18deg 36deg,
-      #111 36deg 54deg,
-      #f2f2f2 54deg 72deg,
-      #111 72deg 90deg,
-      #f2f2f2 90deg 108deg,
-      #111 108deg 126deg,
-      #f2f2f2 126deg 144deg,
-      #111 144deg 162deg,
-      #f2f2f2 162deg 180deg,
-      #111 180deg 198deg,
-      #f2f2f2 198deg 216deg,
-      #111 216deg 234deg,
-      #f2f2f2 234deg 252deg,
-      #111 252deg 270deg,
-      #f2f2f2 270deg 288deg,
-      #111 288deg 306deg,
-      #f2f2f2 306deg 324deg,
-      #111 324deg 342deg,
-      #f2f2f2 342deg 360deg
+      #111 0 18deg, #f2f2f2 18deg 36deg, #111 36deg 54deg, #f2f2f2 54deg 72deg,
+      #111 72deg 90deg, #f2f2f2 90deg 108deg, #111 108deg 126deg, #f2f2f2 126deg 144deg,
+      #111 144deg 162deg, #f2f2f2 162deg 180deg, #111 180deg 198deg, #f2f2f2 198deg 216deg,
+      #111 216deg 234deg, #f2f2f2 234deg 252deg, #111 252deg 270deg, #f2f2f2 270deg 288deg,
+      #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #f2f2f2 342deg 360deg
     );
   box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.18),
-    inset 0 2px 0 rgba(255,255,255,.75),
-    inset 0 -2px 0 rgba(0,0,0,.08),
-    0 10px 22px rgba(0,0,0,.22);
+    inset 0 0 0 2px rgba(0,0,0,.18), inset 0 2px 0 rgba(255,255,255,.75),
+    inset 0 -2px 0 rgba(0,0,0,.08), 0 10px 22px rgba(0,0,0,.22);
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
@@ -195,9 +173,7 @@ img.show{ opacity:1; }
   inset:9px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
-  box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.10),
-    0 0 0 2px rgba(255,255,255,.35);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.10), 0 0 0 2px rgba(255,255,255,.35);
 }
 
 .spinWheel::after{
@@ -238,7 +214,7 @@ img.show{ opacity:1; }
   line-height:1.4;
 }
 
-form{ margin-top:14px; }
+form{ margin-top:12px; }
 
 .inputLabel{
   display:block;
@@ -420,10 +396,7 @@ canvas{
         Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ja inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
       </div>
 
-      <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
-
-      <form id="emailForm" method="POST" target="hidden_iframe"
-            action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
+      <form id="emailForm" method="POST" action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
         <label for="email" class="inputLabel">Sähköposti</label>
         <input 
           id="email" 
@@ -446,8 +419,6 @@ const overlayBg = document.getElementById("overlayBg");
 function openPopup(){
   overlayBg.style.display = "flex";
   requestAnimationFrame(() => overlayBg.classList.add("show"));
-  try { window.top.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
-  try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
 }
 
 function closePopupWithFade(){
@@ -540,7 +511,6 @@ spinBtn.onclick = () => {
     showBookAfterSpin();
     return;
   }
-
   const pick = Math.floor(Math.random() * tattoos.length);
   saveLock(pick);
   spinAnim(pick);
@@ -551,9 +521,6 @@ const emailInput = document.getElementById("email");
 const submitBtn = document.getElementById("submitBtn");
 const statusModal = document.getElementById("statusModal");
 const statusMessage = document.getElementById("statusMessage");
-const hiddenIframe = document.getElementById("hidden_iframe");
-
-let emailFormSubmitting = false;
 
 function isValidEmail(val){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
@@ -573,10 +540,10 @@ function hideCenterStatus(){
 }
 
 emailForm.addEventListener("submit", (e) => {
+  e.preventDefault(); 
   const val = emailInput.value.trim();
 
   if (!isValidEmail(val)) {
-    e.preventDefault();
     showCenterStatus("Syötä kelvollinen sähköpostiosoite.");
     setTimeout(hideCenterStatus, 2000);
     return;
@@ -584,23 +551,29 @@ emailForm.addEventListener("submit", (e) => {
 
   submitBtn.disabled = true;
   showCenterStatus("Liitytään...");
-  emailFormSubmitting = true;
-});
 
-hiddenIframe.addEventListener("load", () => {
-  if (!emailFormSubmitting) return;
-  emailFormSubmitting = false;
-  submitBtn.disabled = false;
-  
-  // Başarılı durumu ortada göster
-  statusMessage.textContent = "Liittynyt ✅";
-  emailInput.value = "";
+  const formData = new FormData(emailForm);
 
-  // 1.2 saniye sonra pop-up'ı otomatik kapat
-  setTimeout(() => {
-    closePopupWithFade();
-    hideCenterStatus();
-  }, 1200);
+  fetch(emailForm.action, {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' 
+  }).then(() => {
+    statusMessage.textContent = "Liittynyt ✅";
+    emailInput.value = "";
+    
+    // 1.2 saniye bekleyip tüm ekranı otomatik kapat
+    setTimeout(() => {
+      closePopupWithFade();
+      hideCenterStatus();
+      submitBtn.disabled = false;
+    }, 1200);
+
+  }).catch((error) => {
+    statusMessage.textContent = "Virhe tapahtui!";
+    setTimeout(hideCenterStatus, 2000);
+    submitBtn.disabled = false;
+  });
 });
 </script>
 </body>

@@ -484,10 +484,10 @@ function spinAnim(finalIndex){
   bookBtn.style.display = "none";
 
   let current = Math.floor(Math.random() * tattoos.length);
-  let delay = 55;
+  let delay = 48; // İdeal orta başlangıç hızı
 
   (function step(turn){
-    if (turn > 28){
+    if (turn > 22){ // İdeal orta durma noktası
       setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
       showBookAfterSpin();
@@ -498,7 +498,7 @@ function spinAnim(finalIndex){
     current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
     img.src = tattoos[current];
     img.classList.add("show");
-    delay = Math.round(delay * 1.15);
+    delay = Math.round(delay * 1.13); // Dengeli ve yumuşak yavaşlama
     setTimeout(() => step(turn + 1), delay);
   })(0);
 }

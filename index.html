@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Tattoo Of The Day</title>
+<title>Tattoo Style Of The Day</title>
 
 <style>
 *{ box-sizing:border-box; }
@@ -196,16 +196,6 @@ img.show{ opacity:1; }
 @keyframes wheelIdle{ to{ transform: rotate(360deg); } }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
 
-#bookBtn{
-  display:none;
-  text-decoration:none;
-  text-align:center;
-  color:#111;
-  background:linear-gradient(145deg,#bfbfbf,#8f8f8f,#cfcfcf);
-  border:1px solid #666;
-  letter-spacing:.5px;
-}
-
 .subscribe{
   margin-top:10px;
   font-size:12px;
@@ -384,11 +374,6 @@ canvas{
             <span class="spinWheel" aria-hidden="true"></span>
             <span>SPIN</span>
           </button>
-
-          <a id="bookBtn" class="btn" target="_top" rel="noopener"
-             href="https://ajanvaraus.inkyvibestattoo.com">
-            Varaa Aika Nyt
-          </a>
         </div>
       </div>
 
@@ -423,7 +408,6 @@ function openPopup(){
 }
 
 function closeAndGoHome(){
-  // Hem pop-up'ı gizle hem de kullanıcıyı ana siteye gönder.
   overlayBg.classList.remove("show");
   setTimeout(() => {
     overlayBg.style.display = "none";
@@ -445,7 +429,6 @@ const tattoos = [...Array(TOTAL)].map((_, i) => `tattoo${i + 1}.jpg`);
 
 const img = document.getElementById("img");
 const spinBtn = document.getElementById("spinBtn");
-const bookBtn = document.getElementById("bookBtn");
 
 const KEY = "tattoo24";
 const DAY = 24 * 60 * 60 * 1000;
@@ -474,23 +457,17 @@ function saveLock(index){
   localStorage.setItem(KEY, JSON.stringify({ i: index, until: Date.now() + DAY }));
 }
 
-function showBookAfterSpin(){
-  bookBtn.style.display = "block";
-}
-
 function spinAnim(finalIndex){
   spinBtn.disabled = true;
   spinBtn.classList.add("isSpinning");
-  bookBtn.style.display = "none";
 
   let current = Math.floor(Math.random() * tattoos.length);
-  let delay = 48; // İdeal orta başlangıç hızı
+  let delay = 48; 
 
   (function step(turn){
-    if (turn > 22){ // İdeal orta durma noktası
+    if (turn > 22){ 
       setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
-      showBookAfterSpin();
       spinBtn.disabled = false;
       return;
     }
@@ -498,7 +475,7 @@ function spinAnim(finalIndex){
     current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
     img.src = tattoos[current];
     img.classList.add("show");
-    delay = Math.round(delay * 1.13); // Dengeli ve yumuşak yavaşlama
+    delay = Math.round(delay * 1.13);
     setTimeout(() => step(turn + 1), delay);
   })(0);
 }
@@ -506,14 +483,12 @@ function spinAnim(finalIndex){
 const locked = loadLock();
 if (locked){
   setImg(tattoos[locked.i]);
-  showBookAfterSpin();
 }
 
 spinBtn.onclick = () => {
   const existing = loadLock();
   if (existing){
     setImg(tattoos[existing.i]);
-    showBookAfterSpin();
     return;
   }
   const pick = Math.floor(Math.random() * tattoos.length);
@@ -567,7 +542,6 @@ emailForm.addEventListener("submit", (e) => {
     statusMessage.textContent = "Liittynyt ✅";
     emailInput.value = "";
     
-    // 1.2 saniye bekleyip ANA SAYFAYA YÖNLENDİR (beyaz sayfa sorununu kökten çözer)
     setTimeout(() => {
       closeAndGoHome();
     }, 1200);

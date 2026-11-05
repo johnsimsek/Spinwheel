@@ -48,7 +48,7 @@ body{
 
 #popup{
   width:100%;
-  max-width:440px; /* Eski genişliğine geri getirildi */
+  max-width:440px; 
   position:relative;
   max-height:95svh;
   overflow:auto;
@@ -66,7 +66,7 @@ body{
 .box{
   width:100%;
   background:#141420;
-  padding:16px; /* Eski boşluk değerine geri getirildi */
+  padding:16px; 
   border-radius:18px;
   box-shadow:0 30px 80px rgba(0,0,0,.75);
   border:1px solid rgba(255,255,255,.06);
@@ -87,7 +87,7 @@ h2{ text-align:center; margin:4px 0 14px; font-size:26px; }
   display:flex;
   align-items:center;
   justify-content:center;
-  max-height:52vh; /* FOTOĞRAF ALANI ESKİ BOYUTUNA GETİRİLDİ */
+  max-height:52vh; 
 }
 
 img{
@@ -415,16 +415,21 @@ canvas{
 
 <script>
 const overlayBg = document.getElementById("overlayBg");
+const HOME_URL = "https://www.inkyvibestattoo.com";
 
 function openPopup(){
   overlayBg.style.display = "flex";
   requestAnimationFrame(() => overlayBg.classList.add("show"));
 }
 
-function closePopupWithFade(){
+function closeAndGoHome(){
+  // Hem pop-up'ı gizle hem de kullanıcıyı ana siteye gönder.
   overlayBg.classList.remove("show");
   setTimeout(() => {
     overlayBg.style.display = "none";
+    try { window.top.location.href = HOME_URL; return; } catch (e) {}
+    try { window.parent.location.href = HOME_URL; return; } catch (e) {}
+    window.location.href = HOME_URL;
   }, 250);
 }
 
@@ -562,11 +567,9 @@ emailForm.addEventListener("submit", (e) => {
     statusMessage.textContent = "Liittynyt ✅";
     emailInput.value = "";
     
-    // 1.2 saniye bekleyip tüm ekranı otomatik kapat
+    // 1.2 saniye bekleyip ANA SAYFAYA YÖNLENDİR (beyaz sayfa sorununu kökten çözer)
     setTimeout(() => {
-      closePopupWithFade();
-      hideCenterStatus();
-      submitBtn.disabled = false;
+      closeAndGoHome();
     }, 1200);
 
   }).catch((error) => {

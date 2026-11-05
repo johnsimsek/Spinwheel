@@ -1,5 +1,6 @@
+<!-- /index.html -->
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="fi">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,14 +12,13 @@ html, body{ height:100%; }
 
 body{
   margin:0;
-  background:#fff; /* ✅ keep white */
+  background:#fff;
   font-family:Arial, sans-serif;
   color:#111;
   min-height:100vh;
-  overflow:hidden; /* ✅ stop inner scrolling */
+  overflow:hidden;
 }
 
-/* ✅ white shaded layer behind everything (keeps your page white) */
 #whiteShadeBg{
   position:fixed;
   inset:0;
@@ -29,37 +29,24 @@ body{
   z-index:-1;
 }
 
-/* ===== POPUP OVERLAY ===== */
 #overlayBg{
   position:fixed;
   inset:0;
-
-  /* ✅ CHANGE: light overlay (this removes the grey you saw) */
   background:rgba(255,255,255,.78);
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
-
   display:none;
   justify-content:center;
-
-  /* ✅ popup higher (no need to scroll up) */
   align-items:flex-start;
-
-  /* ✅ fixed viewport height inside iframe */
   height:100svh;
   width:100%;
-
   padding:
     max(14px, env(safe-area-inset-top))
     max(14px, env(safe-area-inset-right))
     max(14px, env(safe-area-inset-bottom))
     max(14px, env(safe-area-inset-left));
-
   z-index:99999;
-
-  /* ✅ no scrolling on overlay itself */
   overflow:hidden;
-
   transition: background .22s ease, backdrop-filter .22s ease;
 }
 
@@ -67,15 +54,10 @@ body{
   width:100%;
   max-width:440px;
   position:relative;
-
-  /* ✅ popup can scroll internally if needed */
   max-height: calc(100svh - 28px);
   overflow:auto;
   -webkit-overflow-scrolling: touch;
-
-  /* ✅ small top gap */
   margin-top:6px;
-
   transform: translateY(18px) scale(.96);
   opacity:0;
   transition: opacity .25s ease, transform .25s ease;
@@ -86,27 +68,6 @@ body{
   transform: translateY(0) scale(1);
 }
 
-#closePopup{
-  position:absolute;
-  top:10px;
-  right:10px;
-  width:44px;
-  height:44px;
-  border-radius:999px;
-  background:rgba(0,0,0,.65);
-  border:1px solid rgba(255,255,255,.18);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:22px;
-  cursor:pointer;
-  color:#fff;
-  z-index:100000;
-  box-shadow:0 10px 30px rgba(0,0,0,.35);
-}
-#closePopup:hover{ background:rgba(0,0,0,.85); }
-
-/* ===== POPUP CARD ===== */
 .box{
   width:100%;
   background:#141420;
@@ -170,7 +131,6 @@ img.show{ opacity:1; }
   overflow:hidden;
 }
 
-/* ===== ✅ SPIN BUTTON UPGRADE ===== */
 #spinBtn{
   background: radial-gradient(120% 120% at 30% 20%, #ffffff 0%, #efefef 45%, #d9d9d9 100%);
   color:#111;
@@ -195,7 +155,6 @@ img.show{ opacity:1; }
   border-radius:999px;
   position:relative;
   flex:0 0 34px;
-
   background:
     conic-gradient(
       from 0deg,
@@ -220,18 +179,15 @@ img.show{ opacity:1; }
       #111 324deg 342deg,
       #f2f2f2 342deg 360deg
     );
-
   box-shadow:
     inset 0 0 0 2px rgba(0,0,0,.18),
     inset 0 2px 0 rgba(255,255,255,.75),
     inset 0 -2px 0 rgba(0,0,0,.08),
     0 10px 22px rgba(0,0,0,.22);
-
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
 
-/* center hub */
 .spinWheel::before{
   content:"";
   position:absolute;
@@ -243,7 +199,6 @@ img.show{ opacity:1; }
     0 0 0 2px rgba(255,255,255,.35);
 }
 
-/* pointer/indicator */
 .spinWheel::after{
   content:"";
   position:absolute;
@@ -257,17 +212,15 @@ img.show{ opacity:1; }
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
-/* faster while spinning */
 #spinBtn.isSpinning .spinWheel{
   animation: wheelFast .22s linear infinite;
 }
 
 @keyframes wheelIdle{ to{ transform: rotate(360deg); } }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
-/* ===== ✅ END SPIN BUTTON UPGRADE ===== */
 
 #bookBtn{
-  display:none; /* ✅ only show after spin finished */
+  display:none;
   text-decoration:none;
   text-align:center;
   color:#111;
@@ -275,6 +228,7 @@ img.show{ opacity:1; }
   border:1px solid #666;
   letter-spacing:.5px;
 }
+
 .subscribe{
   margin-top:10px;
   font-size:12px;
@@ -283,7 +237,17 @@ img.show{ opacity:1; }
   line-height:1.4;
 }
 
-form{ margin-top:10px; }
+form{ margin-top:14px; }
+
+.inputLabel{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  color:#ddd;
+  margin-bottom:6px;
+  text-align:left;
+}
+
 input{
   width:100%;
   padding:12px;
@@ -292,18 +256,86 @@ input{
   font-size:16px;
   outline:none;
 }
+
+/* Biraz daha ince Liquid Glass butonu */
 .kirjaudu{
   width:100%;
-  padding:12px;
+  padding:10px 14px;
   border-radius:12px;
-  border:none;
   margin-top:10px;
-  font-weight:800;
-  background:red;
-  color:#fff;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+  color:#ffffff;
   cursor:pointer;
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.28) 0%,
+    rgba(255,255,255,.08) 45%,
+    rgba(255,255,255,.14) 100%
+  );
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.7),
+    inset 0 -1px 1px rgba(0,0,0,.25),
+    0 8px 20px rgba(0,0,0,.45);
+  transition:all .3s ease;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
 }
-.kirjaudu:disabled{ opacity:.6; cursor:not-allowed; }
+
+.kirjaudu::before{
+  content:"";
+  position:absolute;
+  top:-50%;
+  left:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle, rgba(255,255,255,.35) 0%, transparent 65%);
+  opacity:0;
+  transform:scale(.6);
+  transition:opacity .35s ease, transform .35s ease;
+  pointer-events:none;
+}
+
+.kirjaudu:hover{
+  background:linear-gradient(
+    135deg,
+    rgba(255,255,255,.36) 0%,
+    rgba(255,255,255,.12) 45%,
+    rgba(255,255,255,.20) 100%
+  );
+  border-color:rgba(255,255,255,.38);
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.9),
+    inset 0 -1px 1px rgba(0,0,0,.3),
+    0 12px 25px rgba(255,255,255,.15),
+    0 8px 20px rgba(0,0,0,.5);
+  transform:translateY(-1px);
+}
+
+.kirjaudu:hover::before{
+  opacity:1;
+  transform:scale(1);
+}
+
+.kirjaudu:active{
+  transform:translateY(1px);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,.3),
+    0 4px 12px rgba(0,0,0,.4);
+}
+
+.kirjaudu:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+  transform:none;
+}
+
 .status{
   margin-top:8px;
   font-size:12px;
@@ -327,8 +359,6 @@ canvas{
 
 <div id="overlayBg">
   <div id="popup">
-    <button id="closePopup" aria-label="Close" type="button">✕</button>
-
     <div class="box">
       <h2>🔥 Tattoo Of The Day</h2>
 
@@ -341,142 +371,169 @@ canvas{
           </button>
 
           <a id="bookBtn" class="btn" target="_top" rel="noopener"
-             href="https://form.jotform.com/Tattoo_inkyvibestattoo/Ajanvaraus">
+             href="https://ajanvaraus.inkyvibestattoo.com">
             Varaa Aika Nyt
           </a>
         </div>
       </div>
 
       <div class="subscribe">
-        Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ve inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
+        Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ja inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
       </div>
 
-      <iframe name="hidden_iframe" style="display:none;"></iframe>
+      <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
 
-      <form id="phoneForm" method="POST" target="hidden_iframe"
+      <form id="emailForm" method="POST" target="hidden_iframe"
             action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
-        <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" value="+358 " required>
-        <button id="submitBtn" class="kirjaudu" type="submit">Kirjaudu</button>
+        <label for="email" class="inputLabel">Sähköposti</label>
+        <input 
+          id="email" 
+          name="email" 
+          type="email" 
+          inputmode="email" 
+          autocomplete="email" 
+          autocapitalize="none" 
+          spellcheck="false" 
+          required>
+        <button id="submitBtn" class="kirjaudu" type="submit">Tilaa</button>
         <div id="status" class="status"></div>
       </form>
     </div>
-
   </div>
 </div>
 
 <script>
-/* ===== POPUP ALWAYS OPEN IMMEDIATELY ===== */
 const overlayBg = document.getElementById("overlayBg");
-const closePopup = document.getElementById("closePopup");
-
-const HOME_URL = "https://www.inkyvibestattoo.com";
-
-function tryGoHome(){
-  // best effort breakout of iframe
-  try { window.top.location.href = HOME_URL; return; } catch (e) {}
-  try { window.parent.location.href = HOME_URL; return; } catch (e) {}
-  window.location.href = HOME_URL;
-}
 
 function openPopup(){
   overlayBg.style.display = "flex";
   requestAnimationFrame(() => overlayBg.classList.add("show"));
-
-  // best effort: jump parent page to top (may be blocked)
   try { window.top.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
   try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
 }
+
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", openPopup);
 } else {
   openPopup();
 }
 
-/* ✅ X: go to main site */
-closePopup.addEventListener("click", tryGoHome);
+const LOGO = "logo1.jpg";
+const TOTAL = 31;
+const tattoos = [...Array(TOTAL)].map((_, i) => `tattoo${i + 1}.jpg`);
 
-/* tap outside closes overlay only */
-overlayBg.addEventListener("click", (e) => { if (e.target === overlayBg) overlayBg.style.display = "none"; });
+const img = document.getElementById("img");
+const spinBtn = document.getElementById("spinBtn");
+const bookBtn = document.getElementById("bookBtn");
 
-/* ===== images ===== */
-const LOGO="logo1.jpg";
-const TOTAL=31;
-const tattoos=[...Array(TOTAL)].map((_,i)=>`tattoo${i+1}.jpg`);
+const KEY = "tattoo24";
+const DAY = 24 * 60 * 60 * 1000;
 
-const img=document.getElementById("img");
-const spinBtn=document.getElementById("spinBtn");
-const bookBtn=document.getElementById("bookBtn");
+img.src = LOGO;
+img.onload = () => img.classList.add("show");
 
-/* ===== 24h lock: only after SPIN ===== */
-const KEY="tattoo24";
-const DAY=24*60*60*1000;
-
-img.src=LOGO;
-img.onload=()=>img.classList.add("show");
-
-function setImg(s){
+function setImg(src){
   img.classList.remove("show");
-  setTimeout(()=>img.src=s,120);
+  setTimeout(() => { img.src = src; }, 120);
 }
 
 function loadLock(){
   try{
-    const d=JSON.parse(localStorage.getItem(KEY));
-    if(!d) return null;
-    if(Date.now()>d.until) return null;
-    if(typeof d.i!=="number" || d.i<0 || d.i>=tattoos.length) return null;
-    return d;
-  }catch{return null;}
+    const data = JSON.parse(localStorage.getItem(KEY));
+    if (!data) return null;
+    if (Date.now() > data.until) return null;
+    if (typeof data.i !== "number" || data.i < 0 || data.i >= tattoos.length) return null;
+    return data;
+  }catch{
+    return null;
+  }
 }
-function saveLock(i){
-  localStorage.setItem(KEY, JSON.stringify({ i, until: Date.now()+DAY }));
+
+function saveLock(index){
+  localStorage.setItem(KEY, JSON.stringify({ i: index, until: Date.now() + DAY }));
 }
 
 function showBookAfterSpin(){
   bookBtn.style.display = "block";
 }
 
-/* spin animation */
-function spinAnim(final){
-  spinBtn.disabled=true;
+function spinAnim(finalIndex){
+  spinBtn.disabled = true;
   spinBtn.classList.add("isSpinning");
-  bookBtn.style.display="none";
+  bookBtn.style.display = "none";
 
-  let c=Math.floor(Math.random()*tattoos.length),delay=55;
-  (function step(n){
-    if(n>28){
-      setImg(tattoos[final]);
+  let current = Math.floor(Math.random() * tattoos.length);
+  let delay = 55;
+
+  (function step(turn){
+    if (turn > 28){
+      setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
       showBookAfterSpin();
-      spinBtn.disabled=false;
+      spinBtn.disabled = false;
       return;
     }
-    c=(c+1+Math.floor(Math.random()*3))%tattoos.length;
-    img.src=tattoos[c];
+
+    current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
+    img.src = tattoos[current];
     img.classList.add("show");
-    delay=Math.round(delay*1.15);
-    setTimeout(()=>step(n+1),delay);
+    delay = Math.round(delay * 1.15);
+    setTimeout(() => step(turn + 1), delay);
   })(0);
 }
 
-const locked=loadLock();
-if(locked){
+const locked = loadLock();
+if (locked){
   setImg(tattoos[locked.i]);
   showBookAfterSpin();
 }
 
-spinBtn.onclick=()=>{
-  const l=loadLock();
-  if(l){
-    setImg(tattoos[l.i]);
+spinBtn.onclick = () => {
+  const existing = loadLock();
+  if (existing){
+    setImg(tattoos[existing.i]);
     showBookAfterSpin();
     return;
   }
-  const pick=Math.floor(Math.random()*tattoos.length);
+
+  const pick = Math.floor(Math.random() * tattoos.length);
   saveLock(pick);
   spinAnim(pick);
 };
-</script>
 
+const emailForm = document.getElementById("emailForm");
+const emailInput = document.getElementById("email");
+const submitBtn = document.getElementById("submitBtn");
+const statusEl = document.getElementById("status");
+const hiddenIframe = document.getElementById("hidden_iframe");
+
+let emailFormSubmitting = false;
+
+function isValidEmail(val){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+}
+
+emailForm.addEventListener("submit", (e) => {
+  const val = emailInput.value.trim();
+
+  if (!isValidEmail(val)) {
+    e.preventDefault();
+    statusEl.textContent = "Syötä kelvollinen sähköpostiosoite.";
+    return;
+  }
+
+  submitBtn.disabled = true;
+  statusEl.textContent = "Liitytään...";
+  emailFormSubmitting = true;
+});
+
+hiddenIframe.addEventListener("load", () => {
+  if (!emailFormSubmitting) return;
+  emailFormSubmitting = false;
+  submitBtn.disabled = false;
+  statusEl.textContent = "Liittynyt ✅.";
+  emailInput.value = "";
+});
+</script>
 </body>
 </html>

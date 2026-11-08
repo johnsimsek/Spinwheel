@@ -78,13 +78,13 @@ h2{ text-align:center; margin:0 0 10px; font-size:20px; }
   border-radius:14px;
   overflow:hidden;
   background:#0f0f16;
-  aspect-ratio:1/1;
   position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  width: 100%; /* Lisätty leveyden maksimoimiseksi / Added to maximize width */
-  max-height:54vh; /* Kasvatettu kokoa / Increased size */
+  width: 100%; 
+  max-width: 265px; /* Pakottaa kuvan täydelliseksi neliöksi ilman tyhjiä reunoja */
+  aspect-ratio: 1/1; /* Pitää mittasuhteet oikeana */
   margin: 0 auto; 
 }
 
@@ -231,7 +231,7 @@ form{ margin-top:10px; width: 100%; max-width: 400px; margin-left: auto; margin-
 
 input{
   width:100%;
-  padding:7px 12px; /* Ohennettu syöttökenttää / Thinned input field */
+  padding:7px 12px; 
   border-radius:10px;
   border:none;
   font-size:14px;
@@ -240,7 +240,7 @@ input{
 
 .kirjaudu{
   width:100%;
-  padding:7px 12px; /* Ohennettu painiketta / Thinned button */
+  padding:7px 12px; 
   border-radius:10px;
   margin-top:10px;
   font-weight:700;

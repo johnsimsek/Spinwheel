@@ -59,7 +59,7 @@ body{
   width:100%;
   min-height:100%;
   background:#141420; 
-  padding:14px 16px; /* Tasapainoinen sisätila, joka täyttää kehyksen siististi / Balanced padding to fit the frame nicely */
+  padding:16px 20px; 
   border-radius:0; 
   box-shadow:none; 
   border:none; 
@@ -70,11 +70,11 @@ body{
   justify-content:center; 
 }
 
-h2{ text-align:center; margin:0 0 8px; font-size:20px; }
+h2{ text-align:center; margin:0 0 10px; font-size:22px; }
 
 .imgWrap{
   border:1px solid #2a2a3a;
-  border-radius:14px;
+  border-radius:16px;
   overflow:hidden;
   background:#0f0f16;
   position:relative;
@@ -82,7 +82,7 @@ h2{ text-align:center; margin:0 0 8px; font-size:20px; }
   align-items:center;
   justify-content:center;
   width: 100%; 
-  max-width: 220px; /* Palautettu hyvän kokoiseksi / Restored to a great proportion */
+  max-width: 270px; /* Suurempi kuva-alue / Larger image area */
   aspect-ratio: 1/1; 
   margin: 0 auto; 
 }
@@ -104,22 +104,22 @@ img.show{ opacity:1; }
   flex-direction:column;
   justify-content:flex-end;
   align-items:center;
-  gap:8px;
-  padding:10px;
+  gap:10px;
+  padding:12px;
   pointer-events:none;
 }
 
 .btn{
   pointer-events:auto;
   border:none;
-  border-radius:10px;
-  padding:6px 12px;
-  font-size:12px;
+  border-radius:12px;
+  padding:8px 14px;
+  font-size:14px;
   font-weight:800;
   cursor:pointer;
   width:100%;
-  max-width:190px;
-  box-shadow:0 10px 25px rgba(0,0,0,.45);
+  max-width:230px; /* Suurempi nappi / Larger button */
+  box-shadow:0 12px 30px rgba(0,0,0,.45);
   transition:.25s;
   position:relative;
   overflow:hidden;
@@ -132,30 +132,30 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:8px;
-  letter-spacing:.9px;
+  gap:10px;
+  letter-spacing:1px;
   text-transform:uppercase;
-  padding: 7px 14px;
+  padding: 10px 16px;
 }
 #spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
 
 #spinBtn:hover{
   transform: translateY(-1px) scale(1.01);
-  box-shadow:0 14px 35px rgba(0,0,0,.55);
+  box-shadow:0 16px 40px rgba(0,0,0,.55);
 }
 
 .spinWheel{
-  width:26px;
-  height:26px;
+  width:30px;
+  height:30px;
   border-radius:999px;
   position:relative;
-  flex:0 0 26px;
+  flex:0 0 30px;
   background:
     conic-gradient(
       from 0deg,
       #111 0 18deg, #f2f2f2 18deg 36deg, #111 36deg 54deg, #f2f2f2 54deg 72deg,
       #111 72deg 90deg, #f2f2f2 90deg 108deg, #111 108deg 126deg, #f2f2f2 126deg 144deg,
-      #111 144deg 162deg, #f2f2f2 162deg 180deg, #111 180deg 198deg, #f2f2f2 198deg 216deg,
+      #111 144deg 162deg, #f2f2f2 162deg 180deg, #180deg 198deg, #f2f2f2 198deg 216deg,
       #111 216deg 234deg, #f2f2f2 234deg 252deg, #111 252deg 270deg, #f2f2f2 270deg 288deg,
       #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #f2f2f2 342deg 360deg
     );
@@ -163,7 +163,7 @@ img.show{ opacity:1; }
     inset 0 0 0 2px rgba(0,0,0,.18),
     inset 0 2px 0 rgba(255,255,255,.75),
     inset 0 -2px 0 rgba(0,0,0,.08),
-    0 8px 18px rgba(0,0,0,.22);
+    0 10px 22px rgba(0,0,0,.22);
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
@@ -171,7 +171,7 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:6px;
+  inset:7px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
   box-shadow:
@@ -186,9 +186,9 @@ img.show{ opacity:1; }
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:4px solid transparent;
-  border-right:4px solid transparent;
-  border-bottom:7px solid rgba(0,0,0,.85);
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-bottom:8px solid rgba(0,0,0,.85);
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -200,44 +200,44 @@ img.show{ opacity:1; }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
 
 .subscribe{
-  margin-top:8px; 
-  font-size:11px;
+  margin-top:10px; 
+  font-size:12.5px; /* Isompi teksti / Larger text */
   color:#bbb;
   text-align:center;
-  line-height:1.35;
-  max-width: 380px;
+  line-height:1.4;
+  max-width: 420px;
   margin-left: auto;
   margin-right: auto;
 }
 
-form{ margin-top:8px; width: 100%; max-width: 380px; margin-left: auto; margin-right: auto;} 
+form{ margin-top:10px; width: 100%; max-width: 420px; margin-left: auto; margin-right: auto;} 
 
 .inputLabel{
   display:block;
-  font-size:11px;
+  font-size:12px;
   font-weight:600;
   color:#ddd;
-  margin-bottom:3px;
+  margin-bottom:4px;
   text-align:left;
 }
 
 input{
   width:100%;
-  padding:7px 12px; 
-  border-radius:8px;
+  padding:10px 14px; /* Suurempi tekstikenttä / Larger input field */
+  border-radius:10px;
   border:none;
-  font-size:13px;
+  font-size:15px;
   outline:none;
 }
 
 .kirjaudu{
   width:100%;
-  padding:7px 12px; 
-  border-radius:8px;
-  margin-top:6px; 
+  padding:10px 14px; /* Suurempi tilaa-nappi / Larger submit button */
+  border-radius:10px;
+  margin-top:8px; 
   font-weight:700;
-  font-size:12px;
-  letter-spacing:.8px;
+  font-size:13.5px;
+  letter-spacing:1px;
   text-transform:uppercase;
   color:#ffffff;
   cursor:pointer;
@@ -255,7 +255,7 @@ input{
   box-shadow:
     inset 0 1px 1px rgba(255,255,255,.7),
     inset 0 -1px 1px rgba(0,0,0,.25),
-    0 4px 12px rgba(0,0,0,.45);
+    0 6px 16px rgba(0,0,0,.45);
   transition:all .3s ease;
   text-shadow:0 1px 2px rgba(0,0,0,.5);
 }
@@ -285,8 +285,8 @@ input{
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.9),
     inset 0 -1px 1px rgba(0,0,0,.3),
-    0 8px 18px rgba(255,255,255,.15),
-    0 4px 12px rgba(0,0,0,.5);
+    0 10px 22px rgba(255,255,255,.15),
+    0 6px 16px rgba(0,0,0,.5);
   transform:translateY(-1px);
 }
 
@@ -299,7 +299,7 @@ input{
   transform:translateY(1px);
   box-shadow:
     inset 0 1px 2px rgba(0,0,0,.3),
-    0 2px 8px rgba(0,0,0,.4);
+    0 3px 10px rgba(0,0,0,.4);
 }
 
 .kirjaudu:disabled{
@@ -309,10 +309,10 @@ input{
 }
 
 .status{
-  margin-top:4px;
-  font-size:11px;
+  margin-top:6px;
+  font-size:12px;
   color:#bbb;
-  min-height:12px;
+  min-height:14px;
   text-align:center;
 }
 

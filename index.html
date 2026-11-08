@@ -353,7 +353,6 @@ input{
   -webkit-backdrop-filter: blur(18px);
 }
 
-/* Hata mesajı için özel stil */
 .statusBox.error {
   border-color: rgba(234, 67, 53, 0.6);
   background: linear-gradient(135deg, rgba(234, 67, 53, 0.25) 0%, rgba(20, 20, 32, 0.85) 100%);
@@ -519,26 +518,24 @@ const centerStatusText = document.getElementById("centerStatusText");
 
 let emailFormSubmitting = false;
 
-// Gelişmiş e-posta kontrolü (Geçersiz uzantıları veya hatalı formatları engeller)
+// Strict email validation preventing bad domains like .comm
 function isValidEmail(val){
-  const trimmed = val.trim();
-  // Temel regex format kontrolü + .com, .fi gibi gerçekçi bir uzantı içerdiğinden emin olma
-  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  const trimmed = val.trim().toLowerCase();
+  // Checks basic format and requires at least a 2-letter real extension like .com, .fi, etc.
+  const regex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/;
   return regex.test(trimmed);
 }
 
 emailForm.addEventListener("submit", (e) => {
-  const val = emailInput.value.trim();
+  const val = emailInput.value.trim().toLowerCase();
 
+  // 1. Check if email format is invalid
   if (!isValidEmail(val)) {
     e.preventDefault();
-    
-    // Geçersiz e-posta girildiğinde ortadaki likit cam kutuda uyarı göster
     centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
     centerStatusText.classList.add("error");
     centerStatusOverlay.classList.add("show");
 
-    // 2.5 saniye sonra hatayı otomatik kapat
     setTimeout(() => {
       centerStatusOverlay.classList.remove("show");
       centerStatusText.classList.remove("error");
@@ -548,6 +545,29 @@ emailForm.addEventListener("submit", (e) => {
     return;
   }
 
+  // 2. Check if user already registered before on this device
+  let registeredEmails = [];
+  try {
+    registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
+  } catch (err) {}
+
+  if (registeredEmails.includes(val)) {
+    e.preventDefault();
+    centerStatusText.textContent = "Hienoa, olet jo rekisteröitynyt! 🎉";
+    centerStatusText.classList.remove("error");
+    centerStatusOverlay.classList.add("show");
+
+    setTimeout(() => {
+      try {
+        window.parent.postMessage('closeTattooPopup', '*');
+      } catch (err) {}
+      window.top.location.href = "https://www.inkyvibestattoo.com/";
+    }, 1500);
+
+    return;
+  }
+
+  // Otherwise, proceed with subscription
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
   centerStatusText.textContent = "Liitytään...";
@@ -560,6 +580,17 @@ hiddenIframe.addEventListener("load", () => {
   if (!emailFormSubmitting) return;
   emailFormSubmitting = false;
   submitBtn.disabled = false;
+  
+  // Save email into local storage list so we know they registered
+  const val = emailInput.value.trim().toLowerCase();
+  try {
+    let registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
+    if (!registeredEmails.includes(val)) {
+      registeredEmails.push(val);
+      localStorage.setItem("inky_registered_emails", JSON.stringify(registeredEmails));
+    }
+  } catch (err) {}
+
   statusEl.textContent = "Liittynyt ✅.";
   centerStatusText.textContent = "Liittynyt ✅";
   centerStatusText.classList.remove("error");

@@ -34,7 +34,7 @@ body{
   padding:0; 
   z-index:99999;
   overflow:hidden;
-  transition: opacity .22s ease;
+  transition: opacity .25s ease;
 }
 
 #popup{
@@ -141,7 +141,7 @@ img.show{ opacity:1; }
 
 #spinBtn:hover{
   transform: translateY(-1px) scale(1.01);
-  box-shadow:0 14px 35px rgba(0,0,0,.55);
+  box-shadow:0 16px 40px rgba(0,0,0,.55);
 }
 
 .spinWheel{
@@ -316,20 +316,20 @@ input{
   text-align:center;
 }
 
-/* Keskitetty blur-overlay statusviestille / Centered blur overlay for status message */
+/* Nestemäinen tumma blur-glass efekti keskitetylle tilalle / Liquid dark blur-glass effect for center status */
 #centerStatusOverlay{
   position: absolute;
   inset: 0;
-  background: rgba(20, 20, 32, 0.75);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(15, 15, 25, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.25s ease;
+  transition: opacity 0.3s ease;
 }
 
 #centerStatusOverlay.show{
@@ -338,16 +338,20 @@ input{
 }
 
 .statusBox{
-  background: rgba(25, 25, 38, 0.95);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  padding: 20px 28px;
-  border-radius: 14px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.04) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  padding: 22px 32px;
+  border-radius: 16px;
+  box-shadow: 
+    inset 0 1px 1px rgba(255, 255, 255, 0.4),
+    0 20px 40px rgba(0, 0, 0, 0.65);
   text-align: center;
   color: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
 canvas{
@@ -366,7 +370,7 @@ canvas{
 <div id="overlayBg">
   <div id="popup">
     <div class="box">
-      <!-- Keskitetty tila-overlay / Centered status overlay -->
+      <!-- Nestemäinen blur-glass keskitetty tila-overlay / Liquid blur-glass centered status overlay -->
       <div id="centerStatusOverlay">
         <div id="centerStatusText" class="statusBox">Liitytään...</div>
       </div>
@@ -418,6 +422,13 @@ function openPopup(){
   requestAnimationFrame(() => overlayBg.classList.add("show"));
   try { window.top.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
   try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+}
+
+function closePopup(){
+  overlayBg.classList.remove("show");
+  setTimeout(() => {
+    overlayBg.style.display = "none";
+  }, 250);
 }
 
 if (document.readyState === "loading") {
@@ -537,8 +548,10 @@ hiddenIframe.addEventListener("load", () => {
   statusEl.textContent = "Liittynyt ✅.";
   centerStatusText.textContent = "Liittynyt ✅";
   
+  // Sulkee pyörän/popupin automaattisesti kun liittyminen on valmis
   setTimeout(() => {
     centerStatusOverlay.classList.remove("show");
+    closePopup();
   }, 1500);
 
   emailInput.value = "";

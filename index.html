@@ -152,7 +152,7 @@ img.show{ opacity:1; }
     conic-gradient(
       from 0deg,
       #111 0 18deg, #f2f2f2 18deg 36deg, #111 36deg 54deg, #f2f2f2 54deg 72deg,
-      #111 72deg 90deg, #f2f2f2 90deg 108deg, #111 108deg 126deg, #f2f2f2 126deg 144deg,
+      #111 72deg 90deg, #f2f2f2 90deg 108deg, #111 108deg 126deg, #111 126deg 144deg,
       #111 144deg 162deg, #f2f2f2 162deg 180deg, #111 180deg 198deg, #f2f2f2 198deg 216deg,
       #111 216deg 234deg, #f2f2f2 234deg 252deg, #111 252deg 270deg, #111 270deg 288deg,
       #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #111 342deg 360deg
@@ -493,7 +493,7 @@ const centerStatusText = document.getElementById("centerStatusText");
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec";
 
-// KATI E-POSTI TARKISTUS: Estää .comm, .coom jne.
+// KATI E-POSTI TARKISTUS (.comm engelleme)
 function isValidEmail(val){
   const trimmed = val.trim().toLowerCase();
   const strictRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fi|net|org|eu|io|co|me|info|biz|se|de|uk|us|no|dk)$/;
@@ -505,7 +505,7 @@ emailForm.addEventListener("submit", async (e) => {
 
   const val = emailInput.value.trim().toLowerCase();
 
-  // 1. Sähköposti formaatti tarkistus
+  // 1. Geçersiz e-posta kontrolü
   if (!isValidEmail(val)) {
     centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
     centerStatusText.classList.add("error");
@@ -520,10 +520,10 @@ emailForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // 2. Google Sheets / Backend Kontrolli
+  // 2. Google Sheets / Backend Kontrolü (Arka planda sessizce yapılır, ekranda "Tarkistetaan" yazmaz)
   submitBtn.disabled = true;
-  statusEl.textContent = "Tarkistetaan...";
-  centerStatusText.textContent = "Tarkistetaan...";
+  statusEl.textContent = "Liitytään...";
+  centerStatusText.textContent = "Liitytään...";
   centerStatusText.classList.remove("error");
   centerStatusOverlay.classList.add("show");
 
@@ -531,7 +531,6 @@ emailForm.addEventListener("submit", async (e) => {
     const formData = new FormData();
     formData.append("email", val);
 
-    // Google Apps Script'e istek atıyoruz ve cevabı bekliyoruz
     const response = await fetch(SCRIPT_URL, {
       method: "POST",
       body: formData
@@ -552,7 +551,7 @@ emailForm.addEventListener("submit", async (e) => {
       }, 1200);
 
     } else if (result.error === "already_registered") {
-      // Zaten kayıtlı
+      // Zaten kayıtlı uyarısı
       submitBtn.disabled = false;
       centerStatusText.textContent = "Hienoa, olet jo rekisteröitynyt! 🎉";
       centerStatusText.classList.remove("error");
@@ -566,7 +565,6 @@ emailForm.addEventListener("submit", async (e) => {
       }, 2000);
 
     } else {
-      // Diğer hatalar
       submitBtn.disabled = false;
       centerStatusOverlay.classList.remove("show");
       statusEl.textContent = "Virhe. Yritä uudelleen.";

@@ -316,11 +316,10 @@ input{
   text-align:center;
 }
 
-/* Nestemäinen tumma blur-glass efekti keskitetylle tilalle / Liquid dark blur-glass effect for center status */
 #centerStatusOverlay{
   position: absolute;
   inset: 0;
-  background: rgba(15, 15, 25, 0.55);
+  background: rgba(15, 15, 25, 0.65);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   display: flex;
@@ -328,13 +327,13 @@ input{
   align-items: center;
   z-index: 9999;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 #centerStatusOverlay.show{
   opacity: 1;
-  pointer-events: auto;
+  visibility: visible;
 }
 
 .statusBox{
@@ -370,7 +369,6 @@ canvas{
 <div id="overlayBg">
   <div id="popup">
     <div class="box">
-      <!-- Nestemäinen blur-glass keskitetty tila-overlay / Liquid blur-glass centered status overlay -->
       <div id="centerStatusOverlay">
         <div id="centerStatusText" class="statusBox">Liitytään...</div>
       </div>
@@ -428,6 +426,10 @@ function closePopup(){
   overlayBg.classList.remove("show");
   setTimeout(() => {
     overlayBg.style.display = "none";
+    // Piilotetaan varmuudeksi myös tila-overlay / Ensure status overlay is also hidden
+    if (centerStatusOverlay) {
+      centerStatusOverlay.classList.remove("show");
+    }
   }, 250);
 }
 
@@ -548,11 +550,10 @@ hiddenIframe.addEventListener("load", () => {
   statusEl.textContent = "Liittynyt ✅.";
   centerStatusText.textContent = "Liittynyt ✅";
   
-  // Sulkee pyörän/popupin automaattisesti kun liittyminen on valmis
   setTimeout(() => {
     centerStatusOverlay.classList.remove("show");
     closePopup();
-  }, 1500);
+  }, 1200);
 
   emailInput.value = "";
 });

@@ -91,7 +91,7 @@ h2{ text-align:center; margin:0 0 6px; font-size:20px; }
   align-items:center;
   justify-content:center;
   max-height:52vh;
-  margin: 0 auto; /* TÄMÄ KESKITTÄÄ KUVAN / THIS BRINGS IT BACK TO MIDDLE */
+  margin: 0 auto; 
 }
 
 img{
@@ -120,12 +120,12 @@ img.show{ opacity:1; }
   pointer-events:auto;
   border:none;
   border-radius:12px;
-  padding:8px 14px;
-  font-size:14px;
+  padding:6px 12px; /* Pienennetty */
+  font-size:13px; /* Pienennetty */
   font-weight:800;
   cursor:pointer;
   width:100%;
-  max-width:260px;
+  max-width:210px; /* Pienennetty (oli 260px) */
   box-shadow:0 12px 30px rgba(0,0,0,.45);
   transition:.25s;
   position:relative;
@@ -139,10 +139,10 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:12px;
+  gap:10px; /* Pienennetty */
   letter-spacing:.9px;
   text-transform:uppercase;
-  padding: 10px 16px;
+  padding: 8px 14px; /* Pienennetty */
 }
 #spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
 
@@ -152,11 +152,11 @@ img.show{ opacity:1; }
 }
 
 .spinWheel{
-  width:38px;
-  height:38px;
+  width:30px; /* Pienennetty (oli 38px) */
+  height:30px; /* Pienennetty */
   border-radius:999px;
   position:relative;
-  flex:0 0 38px;
+  flex:0 0 30px; /* Pienennetty */
   background:
     conic-gradient(
       from 0deg,
@@ -178,7 +178,7 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:9px;
+  inset:7px; /* Pienennetty (oli 9px) */
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
   box-shadow:
@@ -189,13 +189,13 @@ img.show{ opacity:1; }
 .spinWheel::after{
   content:"";
   position:absolute;
-  top:-5px;
+  top:-4px; /* Pienennetty */
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:6px solid transparent;
-  border-right:6px solid transparent;
-  border-bottom:10px solid rgba(0,0,0,.85);
+  border-left:5px solid transparent; /* Pienennetty */
+  border-right:5px solid transparent;
+  border-bottom:8px solid rgba(0,0,0,.85); /* Pienennetty */
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -348,19 +348,22 @@ canvas{
     <div class="box">
       <h2>🔥 Tattoo Of The Day</h2>
 
-      <div class="imgWrap">
-        <img id="img" alt="Tattoo">
-        <div class="overlay">
-          <button id="spinBtn" class="btn" type="button" aria-label="Spin">
-            <span class="spinWheel" aria-hidden="true"></span>
-            <span>SPIN</span>
-          </button>
+      <!-- LISÄTTY KESKITYS-WRAPPER (Tämä pakottaa kuvan keskelle myös Safarilla/iOS) -->
+      <div style="display: flex; justify-content: center; width: 100%;">
+          <div class="imgWrap">
+            <img id="img" alt="Tattoo">
+            <div class="overlay">
+              <button id="spinBtn" class="btn" type="button" aria-label="Spin">
+                <span class="spinWheel" aria-hidden="true"></span>
+                <span>SPIN</span>
+              </button>
 
-          <a id="bookBtn" class="btn" target="_top" rel="noopener"
-             href="https://ajanvaraus.inkyvibestattoo.com">
-            Varaa Aika Nyt
-          </a>
-        </div>
+              <a id="bookBtn" class="btn" target="_top" rel="noopener"
+                 href="https://ajanvaraus.inkyvibestattoo.com">
+                Varaa Aika Nyt
+              </a>
+            </div>
+          </div>
       </div>
 
       <div class="subscribe">

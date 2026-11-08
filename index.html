@@ -518,20 +518,22 @@ const centerStatusText = document.getElementById("centerStatusText");
 
 let emailFormSubmitting = false;
 
-// Strict email validation preventing bad domains like .comm
+// 1. TARKKA E-POSTI TARKISTUS (Estää esim. .comm, väärät merkit jne.)
 function isValidEmail(val){
   const trimmed = val.trim().toLowerCase();
-  // Checks basic format and requires at least a 2-letter real extension like .com, .fi, etc.
-  const regex = /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/;
+  // Varmistaa että alussa on teksti, sitten @, sitten verkkotunnus ja lopussa täsmälleen 2-6 kirjaiminen pääte (esim. .fi, .com, .net)
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(trimmed);
 }
 
 emailForm.addEventListener("submit", (e) => {
+  // Estetään aina lomakkeen automaattinen lähetys oletuksena, jotta voimme validoida sen ensin
+  e.preventDefault();
+
   const val = emailInput.value.trim().toLowerCase();
 
-  // 1. Check if email format is invalid
+  // A) Virheellinen sähköposti tarkistus (.comm tms.)
   if (!isValidEmail(val)) {
-    e.preventDefault();
     centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
     centerStatusText.classList.add("error");
     centerStatusOverlay.classList.add("show");
@@ -545,14 +547,13 @@ emailForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // 2. Check if user already registered before on this device
+  // B) Tarkistus onko jo rekisteröity tällä laitteella
   let registeredEmails = [];
   try {
     registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
   } catch (err) {}
 
   if (registeredEmails.includes(val)) {
-    e.preventDefault();
     centerStatusText.textContent = "Hienoa, olet jo rekisteröitynyt! 🎉";
     centerStatusText.classList.remove("error");
     centerStatusOverlay.classList.add("show");
@@ -567,13 +568,15 @@ emailForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // Otherwise, proceed with subscription
+  // C) Jos kaikki ok, lähetetään lomake manuaalisesti piilotettuun iframeen
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
   centerStatusText.textContent = "Liitytään...";
   centerStatusText.classList.remove("error");
   centerStatusOverlay.classList.add("show");
   emailFormSubmitting = true;
+
+  emailForm.submit();
 });
 
 hiddenIframe.addEventListener("load", () => {
@@ -581,7 +584,7 @@ hiddenIframe.addEventListener("load", () => {
   emailFormSubmitting = false;
   submitBtn.disabled = false;
   
-  // Save email into local storage list so we know they registered
+  // Tallenna sähköposti laitteen muistiin onnistuneen lähetyksen jälkeen
   const val = emailInput.value.trim().toLowerCase();
   try {
     let registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");

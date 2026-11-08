@@ -18,9 +18,7 @@ body{
   overflow:hidden;
 }
 
-#whiteShadeBg{
-  display:none; 
-}
+#whiteShadeBg{ display:none; }
 
 #overlayBg{
   position:fixed;
@@ -156,8 +154,8 @@ img.show{ opacity:1; }
       #111 0 18deg, #f2f2f2 18deg 36deg, #111 36deg 54deg, #f2f2f2 54deg 72deg,
       #111 72deg 90deg, #f2f2f2 90deg 108deg, #111 108deg 126deg, #f2f2f2 126deg 144deg,
       #111 144deg 162deg, #f2f2f2 162deg 180deg, #111 180deg 198deg, #f2f2f2 198deg 216deg,
-      #111 216deg 234deg, #f2f2f2 234deg 252deg, #111 252deg 270deg, #f2f2f2 270deg 288deg,
-      #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #f2f2f2 342deg 360deg
+      #111 216deg 234deg, #f2f2f2 234deg 252deg, #111 252deg 270deg, #111 270deg 288deg,
+      #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #111 342deg 360deg
     );
   box-shadow:
     inset 0 0 0 2px rgba(0,0,0,.18),
@@ -260,20 +258,6 @@ input{
   text-shadow:0 1px 2px rgba(0,0,0,.5);
 }
 
-.kirjaudu::before{
-  content:"";
-  position:absolute;
-  top:-50%;
-  left:-50%;
-  width:200%;
-  height:200%;
-  background:radial-gradient(circle, rgba(255,255,255,.35) 0%, transparent 65%);
-  opacity:0;
-  transform:scale(.6);
-  transition:opacity .35s ease, transform .35s ease;
-  pointer-events:none;
-}
-
 .kirjaudu:hover{
   background:linear-gradient(
     135deg,
@@ -288,11 +272,6 @@ input{
     0 8px 18px rgba(255,255,255,.15),
     0 5px 14px rgba(0,0,0,.5);
   transform:translateY(-1px);
-}
-
-.kirjaudu:hover::before{
-  opacity:1;
-  transform:scale(1);
 }
 
 .kirjaudu:active{
@@ -514,11 +493,11 @@ const centerStatusText = document.getElementById("centerStatusText");
 
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec";
 
-// Strict email regex requiring correct domain extension (e.g. .com, .fi, .net - blocks .comm)
+// KATI E-POSTI TARKISTUS: Estää .comm, .coom jne.
 function isValidEmail(val){
   const trimmed = val.trim().toLowerCase();
-  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-  return regex.test(trimmed);
+  const strictRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|fi|net|org|eu|io|co|me|info|biz|se|de|uk|us|no|dk)$/;
+  return strictRegex.test(trimmed);
 }
 
 emailForm.addEventListener("submit", async (e) => {
@@ -526,7 +505,7 @@ emailForm.addEventListener("submit", async (e) => {
 
   const val = emailInput.value.trim().toLowerCase();
 
-  // 1. Validate Email format strictly (blocks .comm etc.)
+  // 1. Sähköposti formaatti tarkistus
   if (!isValidEmail(val)) {
     centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
     centerStatusText.classList.add("error");
@@ -541,31 +520,10 @@ emailForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // 2. Check LocalStorage if already registered
-  let registeredEmails = [];
-  try {
-    registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
-  } catch (err) {}
-
-  if (registeredEmails.includes(val)) {
-    centerStatusText.textContent = "Hienoa, olet jo rekisteröitynyt! 🎉";
-    centerStatusText.classList.remove("error");
-    centerStatusOverlay.classList.add("show");
-
-    setTimeout(() => {
-      try {
-        window.parent.postMessage('closeTattooPopup', '*');
-      } catch (err) {}
-      window.top.location.href = "https://www.inkyvibestattoo.com/";
-    }, 1500);
-
-    return;
-  }
-
-  // 3. Submit to Google Sheets via Fetch (no-cors)
+  // 2. Google Sheets / Backend Kontrolli
   submitBtn.disabled = true;
-  statusEl.textContent = "Liitytään...";
-  centerStatusText.textContent = "Liitytään...";
+  statusEl.textContent = "Tarkistetaan...";
+  centerStatusText.textContent = "Tarkistetaan...";
   centerStatusText.classList.remove("error");
   centerStatusOverlay.classList.add("show");
 
@@ -573,25 +531,46 @@ emailForm.addEventListener("submit", async (e) => {
     const formData = new FormData();
     formData.append("email", val);
 
-    await fetch(SCRIPT_URL, {
+    // Google Apps Script'e istek atıyoruz ve cevabı bekliyoruz
+    const response = await fetch(SCRIPT_URL, {
       method: "POST",
-      body: formData,
-      mode: "no-cors"
+      body: formData
     });
 
-    // Save into device localStorage
-    registeredEmails.push(val);
-    localStorage.setItem("inky_registered_emails", JSON.stringify(registeredEmails));
+    const result = await response.json();
 
-    statusEl.textContent = "Liittynyt ✅.";
-    centerStatusText.textContent = "Liittynyt ✅";
+    if (result.ok) {
+      // Başarılı kayıt
+      statusEl.textContent = "Liittynyt ✅.";
+      centerStatusText.textContent = "Liittynyt ✅";
 
-    setTimeout(() => {
-      try {
-        window.parent.postMessage('closeTattooPopup', '*');
-      } catch (err) {}
-      window.top.location.href = "https://www.inkyvibestattoo.com/";
-    }, 1200);
+      setTimeout(() => {
+        try {
+          window.parent.postMessage('closeTattooPopup', '*');
+        } catch (err) {}
+        window.top.location.href = "https://www.inkyvibestattoo.com/";
+      }, 1200);
+
+    } else if (result.error === "already_registered") {
+      // Zaten kayıtlı
+      submitBtn.disabled = false;
+      centerStatusText.textContent = "Hienoa, olet jo rekisteröitynyt! 🎉";
+      centerStatusText.classList.remove("error");
+
+      setTimeout(() => {
+        centerStatusOverlay.classList.remove("show");
+        try {
+          window.parent.postMessage('closeTattooPopup', '*');
+        } catch (err) {}
+        window.top.location.href = "https://www.inkyvibestattoo.com/";
+      }, 2000);
+
+    } else {
+      // Diğer hatalar
+      submitBtn.disabled = false;
+      centerStatusOverlay.classList.remove("show");
+      statusEl.textContent = "Virhe. Yritä uudelleen.";
+    }
 
   } catch (err) {
     submitBtn.disabled = false;

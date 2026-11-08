@@ -82,7 +82,7 @@ h2{ text-align:center; margin:0 0 9px; font-size:22px; }
   align-items:center;
   justify-content:center;
   width: 100%; 
-  max-width: 275px; /* Hieman isompi kuva-alue / Slightly larger image area */
+  max-width: 275px; 
   aspect-ratio: 1/1; 
   margin: 0 auto; 
 }
@@ -316,6 +316,40 @@ input{
   text-align:center;
 }
 
+/* Keskitetty blur-overlay statusviestille / Centered blur overlay for status message */
+#centerStatusOverlay{
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 20, 32, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+#centerStatusOverlay.show{
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.statusBox{
+  background: rgba(25, 25, 38, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 20px 28px;
+  border-radius: 14px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+  text-align: center;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
 canvas{
   position:fixed;
   inset:0;
@@ -332,6 +366,11 @@ canvas{
 <div id="overlayBg">
   <div id="popup">
     <div class="box">
+      <!-- Keskitetty tila-overlay / Centered status overlay -->
+      <div id="centerStatusOverlay">
+        <div id="centerStatusText" class="statusBox">Liitytään...</div>
+      </div>
+
       <h2>🔥 Tattoo Of The Day</h2>
 
       <div style="display: flex; justify-content: center; width: 100%;">
@@ -426,10 +465,10 @@ function spinAnim(finalIndex){
   spinBtn.classList.add("isSpinning");
 
   let current = Math.floor(Math.random() * tattoos.length);
-  let delay = 40; // Hieman pidempi aloitusviive / Slightly longer starting delay
+  let delay = 40;
 
   (function step(turn){
-    if (turn > 28){ // Lisätty kierroksia, jotta pyörii pidempään / Increased turns so it spins longer
+    if (turn > 28){
       setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
       spinBtn.disabled = false;
@@ -439,7 +478,7 @@ function spinAnim(finalIndex){
     current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
     img.src = tattoos[current];
     img.classList.add("show");
-    delay = Math.round(delay * 1.08); // Loivempi hidastuvuus pidentää pyörintäaikaa / Smoother deceleration curve for longer spin time
+    delay = Math.round(delay * 1.08);
     setTimeout(() => step(turn + 1), delay);
   })(0);
 }
@@ -466,6 +505,8 @@ const emailInput = document.getElementById("email");
 const submitBtn = document.getElementById("submitBtn");
 const statusEl = document.getElementById("status");
 const hiddenIframe = document.getElementById("hidden_iframe");
+const centerStatusOverlay = document.getElementById("centerStatusOverlay");
+const centerStatusText = document.getElementById("centerStatusText");
 
 let emailFormSubmitting = false;
 
@@ -484,6 +525,8 @@ emailForm.addEventListener("submit", (e) => {
 
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
+  centerStatusText.textContent = "Liitytään...";
+  centerStatusOverlay.classList.add("show");
   emailFormSubmitting = true;
 });
 
@@ -492,6 +535,12 @@ hiddenIframe.addEventListener("load", () => {
   emailFormSubmitting = false;
   submitBtn.disabled = false;
   statusEl.textContent = "Liittynyt ✅.";
+  centerStatusText.textContent = "Liittynyt ✅";
+  
+  setTimeout(() => {
+    centerStatusOverlay.classList.remove("show");
+  }, 1500);
+
   emailInput.value = "";
 });
 </script>

@@ -37,22 +37,27 @@ body{
   -webkit-backdrop-filter:blur(10px);
   display:none;
   justify-content:center;
-  align-items:center;
+  align-items:flex-start;
   height:100svh;
   width:100%;
-  padding:14px;
+  padding:
+    max(14px, env(safe-area-inset-top))
+    max(14px, env(safe-area-inset-right))
+    max(14px, env(safe-area-inset-bottom))
+    max(14px, env(safe-area-inset-left));
   z-index:99999;
   overflow:hidden;
-  transition: opacity .25s ease, background .22s ease, backdrop-filter .22s ease;
+  transition: background .22s ease, backdrop-filter .22s ease;
 }
 
 #popup{
   width:100%;
-  max-width:440px; 
+  max-width:440px;
   position:relative;
-  max-height:95svh;
+  max-height: calc(100svh - 28px);
   overflow:auto;
   -webkit-overflow-scrolling: touch;
+  margin-top:6px;
   transform: translateY(18px) scale(.96);
   opacity:0;
   transition: opacity .25s ease, transform .25s ease;
@@ -66,16 +71,17 @@ body{
 .box{
   width:100%;
   background:#141420;
-  padding:16px; 
+  /* Kutu içi boşlukları (padding) daraltıldı */
+  padding:10px 14px;
   border-radius:18px;
   box-shadow:0 30px 80px rgba(0,0,0,.75);
   border:1px solid rgba(255,255,255,.06);
-  overflow:hidden;
-  position:relative;
+  overflow:auto;
   color:#fff;
 }
 
-h2{ text-align:center; margin:4px 0 14px; font-size:26px; }
+/* Başlık fontu ve boşlukları küçültüldü */
+h2{ text-align:center; margin:0 0 6px; font-size:20px; }
 
 .imgWrap{
   border:1px solid #2a2a3a;
@@ -87,7 +93,8 @@ h2{ text-align:center; margin:4px 0 14px; font-size:26px; }
   display:flex;
   align-items:center;
   justify-content:center;
-  max-height:52vh; 
+  /* Fotoğraf alanı Orijinal boyutuna (52vh) geri alındı */
+  max-height:52vh;
 }
 
 img{
@@ -107,8 +114,8 @@ img.show{ opacity:1; }
   flex-direction:column;
   justify-content:flex-end;
   align-items:center;
-  gap:10px;
-  padding:14px;
+  gap:8px;
+  padding:10px;
   pointer-events:none;
 }
 
@@ -116,7 +123,9 @@ img.show{ opacity:1; }
   pointer-events:auto;
   border:none;
   border-radius:12px;
-  padding:12px 14px;
+  /* İç buton boşlukları daraltıldı */
+  padding:8px 14px;
+  font-size:14px;
   font-weight:800;
   cursor:pointer;
   width:100%;
@@ -134,7 +143,7 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:12px;
+  gap:10px;
   letter-spacing:.9px;
   text-transform:uppercase;
 }
@@ -146,11 +155,11 @@ img.show{ opacity:1; }
 }
 
 .spinWheel{
-  width:34px;
-  height:34px;
+  width:28px;
+  height:28px;
   border-radius:999px;
   position:relative;
-  flex:0 0 34px;
+  flex:0 0 28px;
   background:
     conic-gradient(
       from 0deg,
@@ -161,8 +170,10 @@ img.show{ opacity:1; }
       #111 288deg 306deg, #f2f2f2 306deg 324deg, #111 324deg 342deg, #f2f2f2 342deg 360deg
     );
   box-shadow:
-    inset 0 0 0 2px rgba(0,0,0,.18), inset 0 2px 0 rgba(255,255,255,.75),
-    inset 0 -2px 0 rgba(0,0,0,.08), 0 10px 22px rgba(0,0,0,.22);
+    inset 0 0 0 2px rgba(0,0,0,.18),
+    inset 0 2px 0 rgba(255,255,255,.75),
+    inset 0 -2px 0 rgba(0,0,0,.08),
+    0 10px 22px rgba(0,0,0,.22);
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
@@ -170,22 +181,24 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:9px;
+  inset:7px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
-  box-shadow: inset 0 0 0 2px rgba(0,0,0,.10), 0 0 0 2px rgba(255,255,255,.35);
+  box-shadow:
+    inset 0 0 0 2px rgba(0,0,0,.10),
+    0 0 0 2px rgba(255,255,255,.35);
 }
 
 .spinWheel::after{
   content:"";
   position:absolute;
-  top:-5px;
+  top:-4px;
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:6px solid transparent;
-  border-right:6px solid transparent;
-  border-bottom:10px solid rgba(0,0,0,.85);
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-bottom:8px solid rgba(0,0,0,.85);
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -196,42 +209,55 @@ img.show{ opacity:1; }
 @keyframes wheelIdle{ to{ transform: rotate(360deg); } }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
 
-.subscribe{
-  margin-top:10px;
-  font-size:12px;
-  color:#bbb;
+#bookBtn{
+  display:none;
+  text-decoration:none;
   text-align:center;
-  line-height:1.4;
+  color:#111;
+  background:linear-gradient(145deg,#bfbfbf,#8f8f8f,#cfcfcf);
+  border:1px solid #666;
+  letter-spacing:.5px;
 }
 
-form{ margin-top:12px; }
+/* Alt yazı boyutu ve boşluğu minimuma indirildi */
+.subscribe{
+  margin-top:6px;
+  font-size:10.5px;
+  color:#bbb;
+  text-align:center;
+  line-height:1.2;
+}
+
+/* Form boşlukları küçültüldü */
+form{ margin-top:6px; }
 
 .inputLabel{
   display:block;
-  font-size:13px;
+  font-size:11px;
   font-weight:600;
   color:#ddd;
-  margin-bottom:6px;
+  margin-bottom:3px;
   text-align:left;
 }
 
+/* İnput alanı inceltildi */
 input{
   width:100%;
-  padding:12px;
-  border-radius:12px;
+  padding:8px 10px;
+  border-radius:10px;
   border:none;
-  font-size:16px;
+  font-size:14px;
   outline:none;
 }
 
-/* İnce Liquid Glass Buton */
+/* Kayıt ol butonu inceltildi */
 .kirjaudu{
   width:100%;
-  padding:10px 14px;
-  border-radius:12px;
-  margin-top:10px;
+  padding:8px 12px;
+  border-radius:10px;
+  margin-top:6px;
   font-weight:700;
-  font-size:14px;
+  font-size:12px;
   letter-spacing:.8px;
   text-transform:uppercase;
   color:#ffffff;
@@ -303,45 +329,12 @@ input{
   transform:none;
 }
 
-/* Ortada Çıkan Bildirim Rozeti (Liquid Glass) */
-#statusModal{
-  position:absolute;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  background:rgba(10, 10, 18, 0.72);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  z-index:100;
-  opacity:0;
-  transition:opacity .25s ease;
-}
-
-#statusModal.show{
-  display:flex;
-  opacity:1;
-}
-
-.statusCard{
-  background:linear-gradient(135deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.05) 100%);
-  border:1px solid rgba(255,255,255,.25);
-  box-shadow:0 20px 50px rgba(0,0,0,.6), inset 0 1px 1px rgba(255,255,255,.4);
-  padding:20px 32px;
-  border-radius:18px;
-  color:#fff;
-  font-weight:700;
-  font-size:18px;
-  letter-spacing:.5px;
+.status{
+  margin-top:4px;
+  font-size:11px;
+  color:#bbb;
+  min-height:14px;
   text-align:center;
-  transform:scale(.92);
-  transition:transform .25s ease;
-  backdrop-filter:blur(14px);
-  -webkit-backdrop-filter:blur(14px);
-}
-
-#statusModal.show .statusCard{
-  transform:scale(1);
 }
 
 canvas{
@@ -360,11 +353,6 @@ canvas{
 <div id="overlayBg">
   <div id="popup">
     <div class="box">
-      <!-- Ortada çıkan durum rozeti -->
-      <div id="statusModal">
-        <div class="statusCard" id="statusMessage">Liitytään...</div>
-      </div>
-
       <h2>🔥 Tattoo Of The Day</h2>
 
       <div class="imgWrap">
@@ -374,6 +362,11 @@ canvas{
             <span class="spinWheel" aria-hidden="true"></span>
             <span>SPIN</span>
           </button>
+
+          <a id="bookBtn" class="btn" target="_top" rel="noopener"
+             href="https://ajanvaraus.inkyvibestattoo.com">
+            Varaa Aika Nyt
+          </a>
         </div>
       </div>
 
@@ -381,7 +374,10 @@ canvas{
         Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ja inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
       </div>
 
-      <form id="emailForm" method="POST" action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
+      <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
+
+      <form id="emailForm" method="POST" target="hidden_iframe"
+            action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
         <label for="email" class="inputLabel">Sähköposti</label>
         <input 
           id="email" 
@@ -393,6 +389,7 @@ canvas{
           spellcheck="false" 
           required>
         <button id="submitBtn" class="kirjaudu" type="submit">Tilaa</button>
+        <div id="status" class="status"></div>
       </form>
     </div>
   </div>
@@ -400,21 +397,12 @@ canvas{
 
 <script>
 const overlayBg = document.getElementById("overlayBg");
-const HOME_URL = "https://www.inkyvibestattoo.com";
 
 function openPopup(){
   overlayBg.style.display = "flex";
   requestAnimationFrame(() => overlayBg.classList.add("show"));
-}
-
-function closeAndGoHome(){
-  overlayBg.classList.remove("show");
-  setTimeout(() => {
-    overlayBg.style.display = "none";
-    try { window.top.location.href = HOME_URL; return; } catch (e) {}
-    try { window.parent.location.href = HOME_URL; return; } catch (e) {}
-    window.location.href = HOME_URL;
-  }, 250);
+  try { window.top.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
+  try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
 }
 
 if (document.readyState === "loading") {
@@ -429,6 +417,7 @@ const tattoos = [...Array(TOTAL)].map((_, i) => `tattoo${i + 1}.jpg`);
 
 const img = document.getElementById("img");
 const spinBtn = document.getElementById("spinBtn");
+const bookBtn = document.getElementById("bookBtn");
 
 const KEY = "tattoo24";
 const DAY = 24 * 60 * 60 * 1000;
@@ -457,17 +446,23 @@ function saveLock(index){
   localStorage.setItem(KEY, JSON.stringify({ i: index, until: Date.now() + DAY }));
 }
 
+function showBookAfterSpin(){
+  bookBtn.style.display = "block";
+}
+
 function spinAnim(finalIndex){
   spinBtn.disabled = true;
   spinBtn.classList.add("isSpinning");
+  bookBtn.style.display = "none";
 
   let current = Math.floor(Math.random() * tattoos.length);
-  let delay = 48; 
+  let delay = 55;
 
   (function step(turn){
-    if (turn > 22){ 
+    if (turn > 28){
       setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
+      showBookAfterSpin();
       spinBtn.disabled = false;
       return;
     }
@@ -475,7 +470,7 @@ function spinAnim(finalIndex){
     current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
     img.src = tattoos[current];
     img.classList.add("show");
-    delay = Math.round(delay * 1.13);
+    delay = Math.round(delay * 1.15);
     setTimeout(() => step(turn + 1), delay);
   })(0);
 }
@@ -483,14 +478,17 @@ function spinAnim(finalIndex){
 const locked = loadLock();
 if (locked){
   setImg(tattoos[locked.i]);
+  showBookAfterSpin();
 }
 
 spinBtn.onclick = () => {
   const existing = loadLock();
   if (existing){
     setImg(tattoos[existing.i]);
+    showBookAfterSpin();
     return;
   }
+
   const pick = Math.floor(Math.random() * tattoos.length);
   saveLock(pick);
   spinAnim(pick);
@@ -499,58 +497,35 @@ spinBtn.onclick = () => {
 const emailForm = document.getElementById("emailForm");
 const emailInput = document.getElementById("email");
 const submitBtn = document.getElementById("submitBtn");
-const statusModal = document.getElementById("statusModal");
-const statusMessage = document.getElementById("statusMessage");
+const statusEl = document.getElementById("status");
+const hiddenIframe = document.getElementById("hidden_iframe");
+
+let emailFormSubmitting = false;
 
 function isValidEmail(val){
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
 }
 
-function showCenterStatus(msg){
-  statusMessage.textContent = msg;
-  statusModal.style.display = "flex";
-  requestAnimationFrame(() => statusModal.classList.add("show"));
-}
-
-function hideCenterStatus(){
-  statusModal.classList.remove("show");
-  setTimeout(() => {
-    statusModal.style.display = "none";
-  }, 250);
-}
-
 emailForm.addEventListener("submit", (e) => {
-  e.preventDefault(); 
   const val = emailInput.value.trim();
 
   if (!isValidEmail(val)) {
-    showCenterStatus("Syötä kelvollinen sähköpostiosoite.");
-    setTimeout(hideCenterStatus, 2000);
+    e.preventDefault();
+    statusEl.textContent = "Syötä kelvollinen sähköpostiosoite.";
     return;
   }
 
   submitBtn.disabled = true;
-  showCenterStatus("Liitytään...");
+  statusEl.textContent = "Liitytään...";
+  emailFormSubmitting = true;
+});
 
-  const formData = new FormData(emailForm);
-
-  fetch(emailForm.action, {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors' 
-  }).then(() => {
-    statusMessage.textContent = "Liittynyt ✅";
-    emailInput.value = "";
-    
-    setTimeout(() => {
-      closeAndGoHome();
-    }, 1200);
-
-  }).catch((error) => {
-    statusMessage.textContent = "Virhe tapahtui!";
-    setTimeout(hideCenterStatus, 2000);
-    submitBtn.disabled = false;
-  });
+hiddenIframe.addEventListener("load", () => {
+  if (!emailFormSubmitting) return;
+  emailFormSubmitting = false;
+  submitBtn.disabled = false;
+  statusEl.textContent = "Liittynyt ✅.";
+  emailInput.value = "";
 });
 </script>
 </body>

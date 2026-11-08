@@ -397,10 +397,7 @@ canvas{
         Tilaa Ink Vibes -tatuointisähköpostit saadaksesi eksklusiivisia tarjouksia, alennuksia, viimeisimmät uutiset ja inspiroivaa sisältöä sekä tietoa walk-in-päivistä.
       </div>
 
-      <iframe id="hidden_iframe" name="hidden_iframe" style="display:none;"></iframe>
-
-      <form id="emailForm" method="POST" target="hidden_iframe"
-            action="https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec">
+      <form id="emailForm">
         <label for="email" class="inputLabel">Sähköposti</label>
         <input 
           id="email" 
@@ -512,27 +509,24 @@ const emailForm = document.getElementById("emailForm");
 const emailInput = document.getElementById("email");
 const submitBtn = document.getElementById("submitBtn");
 const statusEl = document.getElementById("status");
-const hiddenIframe = document.getElementById("hidden_iframe");
 const centerStatusOverlay = document.getElementById("centerStatusOverlay");
 const centerStatusText = document.getElementById("centerStatusText");
 
-let emailFormSubmitting = false;
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwYEegtNF44clO31rVT0XQJxSmsqr_FwhY6QvdbvF9n2bJUYUrcKp_Izm3y_OUhHFJcUw/exec";
 
-// 1. TARKKA E-POSTI TARKISTUS (Estää esim. .comm, väärät merkit jne.)
+// Strict email regex requiring correct domain extension (e.g. .com, .fi, .net - blocks .comm)
 function isValidEmail(val){
   const trimmed = val.trim().toLowerCase();
-  // Varmistaa että alussa on teksti, sitten @, sitten verkkotunnus ja lopussa täsmälleen 2-6 kirjaiminen pääte (esim. .fi, .com, .net)
   const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
   return regex.test(trimmed);
 }
 
-emailForm.addEventListener("submit", (e) => {
-  // Estetään aina lomakkeen automaattinen lähetys oletuksena, jotta voimme validoida sen ensin
+emailForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const val = emailInput.value.trim().toLowerCase();
 
-  // A) Virheellinen sähköposti tarkistus (.comm tms.)
+  // 1. Validate Email format strictly (blocks .comm etc.)
   if (!isValidEmail(val)) {
     centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
     centerStatusText.classList.add("error");
@@ -547,7 +541,7 @@ emailForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // B) Tarkistus onko jo rekisteröity tällä laitteella
+  // 2. Check LocalStorage if already registered
   let registeredEmails = [];
   try {
     registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
@@ -568,43 +562,42 @@ emailForm.addEventListener("submit", (e) => {
     return;
   }
 
-  // C) Jos kaikki ok, lähetetään lomake manuaalisesti piilotettuun iframeen
+  // 3. Submit to Google Sheets via Fetch (no-cors)
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
   centerStatusText.textContent = "Liitytään...";
   centerStatusText.classList.remove("error");
   centerStatusOverlay.classList.add("show");
-  emailFormSubmitting = true;
 
-  emailForm.submit();
-});
-
-hiddenIframe.addEventListener("load", () => {
-  if (!emailFormSubmitting) return;
-  emailFormSubmitting = false;
-  submitBtn.disabled = false;
-  
-  // Tallenna sähköposti laitteen muistiin onnistuneen lähetyksen jälkeen
-  const val = emailInput.value.trim().toLowerCase();
   try {
-    let registeredEmails = JSON.parse(localStorage.getItem("inky_registered_emails") || "[]");
-    if (!registeredEmails.includes(val)) {
-      registeredEmails.push(val);
-      localStorage.setItem("inky_registered_emails", JSON.stringify(registeredEmails));
-    }
-  } catch (err) {}
+    const formData = new FormData();
+    formData.append("email", val);
 
-  statusEl.textContent = "Liittynyt ✅.";
-  centerStatusText.textContent = "Liittynyt ✅";
-  centerStatusText.classList.remove("error");
-  
-  setTimeout(() => {
-    try {
-      window.parent.postMessage('closeTattooPopup', '*');
-    } catch (e) {}
-    
-    window.top.location.href = "https://www.inkyvibestattoo.com/";
-  }, 1000);
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      body: formData,
+      mode: "no-cors"
+    });
+
+    // Save into device localStorage
+    registeredEmails.push(val);
+    localStorage.setItem("inky_registered_emails", JSON.stringify(registeredEmails));
+
+    statusEl.textContent = "Liittynyt ✅.";
+    centerStatusText.textContent = "Liittynyt ✅";
+
+    setTimeout(() => {
+      try {
+        window.parent.postMessage('closeTattooPopup', '*');
+      } catch (err) {}
+      window.top.location.href = "https://www.inkyvibestattoo.com/";
+    }, 1200);
+
+  } catch (err) {
+    submitBtn.disabled = false;
+    centerStatusOverlay.classList.remove("show");
+    statusEl.textContent = "Yhteysvirhe. Yritä uudelleen.";
+  }
 
   emailInput.value = "";
 });

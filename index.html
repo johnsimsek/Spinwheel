@@ -43,7 +43,7 @@ body{
   height:100%;
   position:relative;
   max-height:100svh;
-  overflow:hidden; /* Estää scrollauksen iframe sisällä / Prevents scrolling inside iframe */
+  overflow:hidden;
   margin:0;
   transform: translateY(18px) scale(.96);
   opacity:0;
@@ -59,7 +59,7 @@ body{
   width:100%;
   min-height:100%;
   background:#141420; 
-  padding:12px 14px; /* Tiivistetty ylhäältä ja alhaalta / Tightened top & bottom padding */
+  padding:6px 10px; /* Tiivistetty entisestään tyhjän tilan poistamiseksi / Further tightened to remove blank space */
   border-radius:0; 
   box-shadow:none; 
   border:none; 
@@ -70,11 +70,11 @@ body{
   justify-content:center; 
 }
 
-h2{ text-align:center; margin:0 0 6px; font-size:19px; } /* Pienempi väli / Smaller margin */
+h2{ text-align:center; margin:0 0 4px; font-size:18px; }
 
 .imgWrap{
   border:1px solid #2a2a3a;
-  border-radius:14px;
+  border-radius:12px;
   overflow:hidden;
   background:#0f0f16;
   position:relative;
@@ -82,7 +82,7 @@ h2{ text-align:center; margin:0 0 6px; font-size:19px; } /* Pienempi väli / Sma
   align-items:center;
   justify-content:center;
   width: 100%; 
-  max-width: 240px; /* Pienennetty hieman pystysuunnan säästämiseksi / Slightly smaller to save vertical space */
+  max-width: 210px; /* Pienennetty korkeutta / Reduced height */
   aspect-ratio: 1/1; 
   margin: 0 auto; 
 }
@@ -105,21 +105,21 @@ img.show{ opacity:1; }
   justify-content:flex-end;
   align-items:center;
   gap:8px;
-  padding:10px;
+  padding:8px;
   pointer-events:none;
 }
 
 .btn{
   pointer-events:auto;
   border:none;
-  border-radius:12px;
-  padding:6px 12px;
-  font-size:13px;
+  border-radius:10px;
+  padding:5px 10px;
+  font-size:12px;
   font-weight:800;
   cursor:pointer;
   width:100%;
-  max-width:210px;
-  box-shadow:0 12px 30px rgba(0,0,0,.45);
+  max-width:190px;
+  box-shadow:0 10px 25px rgba(0,0,0,.45);
   transition:.25s;
   position:relative;
   overflow:hidden;
@@ -132,24 +132,24 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
+  gap:8px;
   letter-spacing:.9px;
   text-transform:uppercase;
-  padding: 8px 14px;
+  padding: 6px 12px;
 }
 #spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
 
 #spinBtn:hover{
   transform: translateY(-1px) scale(1.01);
-  box-shadow:0 16px 40px rgba(0,0,0,.55);
+  box-shadow:0 14px 35px rgba(0,0,0,.55);
 }
 
 .spinWheel{
-  width:30px;
-  height:30px;
+  width:26px;
+  height:26px;
   border-radius:999px;
   position:relative;
-  flex:0 0 30px;
+  flex:0 0 26px;
   background:
     conic-gradient(
       from 0deg,
@@ -163,7 +163,7 @@ img.show{ opacity:1; }
     inset 0 0 0 2px rgba(0,0,0,.18),
     inset 0 2px 0 rgba(255,255,255,.75),
     inset 0 -2px 0 rgba(0,0,0,.08),
-    0 10px 22px rgba(0,0,0,.22);
+    0 8px 18px rgba(0,0,0,.22);
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
@@ -171,7 +171,7 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:7px;
+  inset:6px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
   box-shadow:
@@ -186,9 +186,9 @@ img.show{ opacity:1; }
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:5px solid transparent;
-  border-right:5px solid transparent;
-  border-bottom:8px solid rgba(0,0,0,.85);
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-bottom:7px solid rgba(0,0,0,.85);
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -199,51 +199,41 @@ img.show{ opacity:1; }
 @keyframes wheelIdle{ to{ transform: rotate(360deg); } }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
 
-#bookBtn{
-  display:none;
-  text-decoration:none;
-  text-align:center;
-  color:#111;
-  background:linear-gradient(145deg,#bfbfbf,#8f8f8f,#cfcfcf);
-  border:1px solid #666;
-  letter-spacing:.5px;
-}
-
 .subscribe{
-  margin-top:6px; /* Tiivistetty / Tightened */
-  font-size:10.5px;
+  margin-top:4px; 
+  font-size:10px;
   color:#bbb;
   text-align:center;
-  line-height:1.3;
+  line-height:1.25;
 }
 
-form{ margin-top:6px; width: 100%; max-width: 400px; margin-left: auto; margin-right: auto;} /* Tiivistetty / Tightened */
+form{ margin-top:4px; width: 100%; max-width: 380px; margin-left: auto; margin-right: auto;} 
 
 .inputLabel{
   display:block;
-  font-size:11px;
+  font-size:10.5px;
   font-weight:600;
   color:#ddd;
-  margin-bottom:3px;
+  margin-bottom:2px;
   text-align:left;
 }
 
 input{
   width:100%;
-  padding:7px 12px; 
-  border-radius:10px;
+  padding:6px 10px; 
+  border-radius:8px;
   border:none;
-  font-size:14px;
+  font-size:13px;
   outline:none;
 }
 
 .kirjaudu{
   width:100%;
-  padding:7px 12px; 
-  border-radius:10px;
-  margin-top:6px; /* Tiivistetty / Tightened */
+  padding:6px 10px; 
+  border-radius:8px;
+  margin-top:4px; 
   font-weight:700;
-  font-size:12px;
+  font-size:11.5px;
   letter-spacing:.8px;
   text-transform:uppercase;
   color:#ffffff;
@@ -262,7 +252,7 @@ input{
   box-shadow:
     inset 0 1px 1px rgba(255,255,255,.7),
     inset 0 -1px 1px rgba(0,0,0,.25),
-    0 8px 20px rgba(0,0,0,.45);
+    0 6px 16px rgba(0,0,0,.45);
   transition:all .3s ease;
   text-shadow:0 1px 2px rgba(0,0,0,.5);
 }
@@ -292,8 +282,8 @@ input{
   box-shadow:
     inset 0 1px 2px rgba(255,255,255,.9),
     inset 0 -1px 1px rgba(0,0,0,.3),
-    0 12px 25px rgba(255,255,255,.15),
-    0 8px 20px rgba(0,0,0,.5);
+    0 10px 22px rgba(255,255,255,.15),
+    0 6px 16px rgba(0,0,0,.5);
   transform:translateY(-1px);
 }
 
@@ -306,7 +296,7 @@ input{
   transform:translateY(1px);
   box-shadow:
     inset 0 1px 2px rgba(0,0,0,.3),
-    0 4px 12px rgba(0,0,0,.4);
+    0 3px 10px rgba(0,0,0,.4);
 }
 
 .kirjaudu:disabled{
@@ -316,10 +306,10 @@ input{
 }
 
 .status{
-  margin-top:6px;
-  font-size:11px;
+  margin-top:4px;
+  font-size:10.5px;
   color:#bbb;
-  min-height:14px;
+  min-height:12px;
   text-align:center;
 }
 
@@ -349,11 +339,6 @@ canvas{
                 <span class="spinWheel" aria-hidden="true"></span>
                 <span>SPIN</span>
               </button>
-
-              <a id="bookBtn" class="btn" target="_top" rel="noopener"
-                 href="https://ajanvaraus.inkyvibestattoo.com">
-                Varaa Aika Nyt
-              </a>
             </div>
           </div>
       </div>
@@ -405,7 +390,6 @@ const tattoos = [...Array(TOTAL)].map((_, i) => `tattoo${i + 1}.jpg`);
 
 const img = document.getElementById("img");
 const spinBtn = document.getElementById("spinBtn");
-const bookBtn = document.getElementById("bookBtn");
 
 const KEY = "tattoo24";
 const DAY = 24 * 60 * 60 * 1000;
@@ -415,7 +399,7 @@ img.onload = () => img.classList.add("show");
 
 function setImg(src){
   img.classList.remove("show");
-  setTimeout(() => { img.src = src; }, 120);
+  setTimeout(() => { img.src = src; }, 80);
 }
 
 function loadLock(){
@@ -434,23 +418,17 @@ function saveLock(index){
   localStorage.setItem(KEY, JSON.stringify({ i: index, until: Date.now() + DAY }));
 }
 
-function showBookAfterSpin(){
-  bookBtn.style.display = "block";
-}
-
 function spinAnim(finalIndex){
   spinBtn.disabled = true;
   spinBtn.classList.add("isSpinning");
-  bookBtn.style.display = "none";
 
   let current = Math.floor(Math.random() * tattoos.length);
-  let delay = 55;
+  let delay = 30; // Lyhennetty alkuviivettä (nopeampi alku) / Shorter initial delay
 
   (function step(turn){
-    if (turn > 28){
+    if (turn > 14){ // Vähennetty kierroksia (pysähtyy nopeammin) / Fewer turns for quicker stop
       setImg(tattoos[finalIndex]);
       spinBtn.classList.remove("isSpinning");
-      showBookAfterSpin();
       spinBtn.disabled = false;
       return;
     }
@@ -458,7 +436,7 @@ function spinAnim(finalIndex){
     current = (current + 1 + Math.floor(Math.random() * 3)) % tattoos.length;
     img.src = tattoos[current];
     img.classList.add("show");
-    delay = Math.round(delay * 1.15);
+    delay = Math.round(delay * 1.12); // Nopeampi hidastus / Faster slowdown curve
     setTimeout(() => step(turn + 1), delay);
   })(0);
 }
@@ -466,14 +444,12 @@ function spinAnim(finalIndex){
 const locked = loadLock();
 if (locked){
   setImg(tattoos[locked.i]);
-  showBookAfterSpin();
 }
 
 spinBtn.onclick = () => {
   const existing = loadLock();
   if (existing){
     setImg(tattoos[existing.i]);
-    showBookAfterSpin();
     return;
   }
 

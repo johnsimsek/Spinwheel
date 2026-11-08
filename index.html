@@ -353,6 +353,13 @@ input{
   -webkit-backdrop-filter: blur(18px);
 }
 
+/* Hata mesajı için özel stil */
+.statusBox.error {
+  border-color: rgba(234, 67, 53, 0.6);
+  background: linear-gradient(135deg, rgba(234, 67, 53, 0.25) 0%, rgba(20, 20, 32, 0.85) 100%);
+  color: #ff8b85;
+}
+
 canvas{
   position:fixed;
   inset:0;
@@ -512,8 +519,12 @@ const centerStatusText = document.getElementById("centerStatusText");
 
 let emailFormSubmitting = false;
 
+// Gelişmiş e-posta kontrolü (Geçersiz uzantıları veya hatalı formatları engeller)
 function isValidEmail(val){
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val.trim());
+  const trimmed = val.trim();
+  // Temel regex format kontrolü + .com, .fi gibi gerçekçi bir uzantı içerdiğinden emin olma
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  return regex.test(trimmed);
 }
 
 emailForm.addEventListener("submit", (e) => {
@@ -521,13 +532,26 @@ emailForm.addEventListener("submit", (e) => {
 
   if (!isValidEmail(val)) {
     e.preventDefault();
-    statusEl.textContent = "Syötä kelvollinen sähköpostiosoite.";
+    
+    // Geçersiz e-posta girildiğinde ortadaki likit cam kutuda uyarı göster
+    centerStatusText.textContent = "Syötä kelvollinen sähköpostiosoite! ⚠️";
+    centerStatusText.classList.add("error");
+    centerStatusOverlay.classList.add("show");
+
+    // 2.5 saniye sonra hatayı otomatik kapat
+    setTimeout(() => {
+      centerStatusOverlay.classList.remove("show");
+      centerStatusText.classList.remove("error");
+    }, 2500);
+
+    statusEl.textContent = "Virheellinen sähköpostiosoite.";
     return;
   }
 
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
   centerStatusText.textContent = "Liitytään...";
+  centerStatusText.classList.remove("error");
   centerStatusOverlay.classList.add("show");
   emailFormSubmitting = true;
 });
@@ -538,13 +562,13 @@ hiddenIframe.addEventListener("load", () => {
   submitBtn.disabled = false;
   statusEl.textContent = "Liittynyt ✅.";
   centerStatusText.textContent = "Liittynyt ✅";
+  centerStatusText.classList.remove("error");
   
   setTimeout(() => {
     try {
       window.parent.postMessage('closeTattooPopup', '*');
     } catch (e) {}
     
-    // Ohjaa suoraan ana sivuun / Directs back to main site cleanly
     window.top.location.href = "https://www.inkyvibestattoo.com/";
   }, 1000);
 

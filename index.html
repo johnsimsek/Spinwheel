@@ -59,7 +59,7 @@ body{
   width:100%;
   min-height:100%;
   background:#141420; 
-  padding:4px 8px; /* Entisestään tiivistetty korkeussuunnassa / Further tightened vertically */
+  padding:14px 16px; /* Tasapainoinen sisätila, joka täyttää kehyksen siististi / Balanced padding to fit the frame nicely */
   border-radius:0; 
   box-shadow:none; 
   border:none; 
@@ -70,11 +70,11 @@ body{
   justify-content:center; 
 }
 
-h2{ text-align:center; margin:0 0 2px; font-size:17px; }
+h2{ text-align:center; margin:0 0 8px; font-size:20px; }
 
 .imgWrap{
   border:1px solid #2a2a3a;
-  border-radius:10px;
+  border-radius:14px;
   overflow:hidden;
   background:#0f0f16;
   position:relative;
@@ -82,7 +82,7 @@ h2{ text-align:center; margin:0 0 2px; font-size:17px; }
   align-items:center;
   justify-content:center;
   width: 100%; 
-  max-width: 180px; /* Pienennetty kuva-aluetta entisestään tyhjän tilan poistamiseksi / Further reduced image size */
+  max-width: 220px; /* Palautettu hyvän kokoiseksi / Restored to a great proportion */
   aspect-ratio: 1/1; 
   margin: 0 auto; 
 }
@@ -104,22 +104,22 @@ img.show{ opacity:1; }
   flex-direction:column;
   justify-content:flex-end;
   align-items:center;
-  gap:6px;
-  padding:6px;
+  gap:8px;
+  padding:10px;
   pointer-events:none;
 }
 
 .btn{
   pointer-events:auto;
   border:none;
-  border-radius:8px;
-  padding:4px 8px;
-  font-size:11px;
+  border-radius:10px;
+  padding:6px 12px;
+  font-size:12px;
   font-weight:800;
   cursor:pointer;
   width:100%;
-  max-width:170px;
-  box-shadow:0 8px 20px rgba(0,0,0,.45);
+  max-width:190px;
+  box-shadow:0 10px 25px rgba(0,0,0,.45);
   transition:.25s;
   position:relative;
   overflow:hidden;
@@ -132,24 +132,24 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:6px;
+  gap:8px;
   letter-spacing:.9px;
   text-transform:uppercase;
-  padding: 5px 10px;
+  padding: 7px 14px;
 }
 #spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
 
 #spinBtn:hover{
   transform: translateY(-1px) scale(1.01);
-  box-shadow:0 12px 30px rgba(0,0,0,.55);
+  box-shadow:0 14px 35px rgba(0,0,0,.55);
 }
 
 .spinWheel{
-  width:22px;
-  height:22px;
+  width:26px;
+  height:26px;
   border-radius:999px;
   position:relative;
-  flex:0 0 22px;
+  flex:0 0 26px;
   background:
     conic-gradient(
       from 0deg,
@@ -163,7 +163,7 @@ img.show{ opacity:1; }
     inset 0 0 0 2px rgba(0,0,0,.18),
     inset 0 2px 0 rgba(255,255,255,.75),
     inset 0 -2px 0 rgba(0,0,0,.08),
-    0 6px 14px rgba(0,0,0,.22);
+    0 8px 18px rgba(0,0,0,.22);
   animation: wheelIdle 1.4s linear infinite;
   transform-origin:50% 50%;
 }
@@ -171,7 +171,7 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:5px;
+  inset:6px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
   box-shadow:
@@ -182,13 +182,13 @@ img.show{ opacity:1; }
 .spinWheel::after{
   content:"";
   position:absolute;
-  top:-3px;
+  top:-4px;
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:3px solid transparent;
-  border-right:3px solid transparent;
-  border-bottom:6px solid rgba(0,0,0,.85);
+  border-left:4px solid transparent;
+  border-right:4px solid transparent;
+  border-bottom:7px solid rgba(0,0,0,.85);
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -200,40 +200,43 @@ img.show{ opacity:1; }
 @keyframes wheelFast{ to{ transform: rotate(360deg); } }
 
 .subscribe{
-  margin-top:2px; 
-  font-size:9.5px;
+  margin-top:8px; 
+  font-size:11px;
   color:#bbb;
   text-align:center;
-  line-height:1.2;
+  line-height:1.35;
+  max-width: 380px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-form{ margin-top:2px; width: 100%; max-width: 360px; margin-left: auto; margin-right: auto;} 
+form{ margin-top:8px; width: 100%; max-width: 380px; margin-left: auto; margin-right: auto;} 
 
 .inputLabel{
   display:block;
-  font-size:10px;
+  font-size:11px;
   font-weight:600;
   color:#ddd;
-  margin-bottom:1px;
+  margin-bottom:3px;
   text-align:left;
 }
 
 input{
   width:100%;
-  padding:5px 8px; 
-  border-radius:6px;
+  padding:7px 12px; 
+  border-radius:8px;
   border:none;
-  font-size:12px;
+  font-size:13px;
   outline:none;
 }
 
 .kirjaudu{
   width:100%;
-  padding:5px 8px; 
-  border-radius:6px;
-  margin-top:2px; 
+  padding:7px 12px; 
+  border-radius:8px;
+  margin-top:6px; 
   font-weight:700;
-  font-size:11px;
+  font-size:12px;
   letter-spacing:.8px;
   text-transform:uppercase;
   color:#ffffff;
@@ -306,10 +309,10 @@ input{
 }
 
 .status{
-  margin-top:2px;
-  font-size:10px;
+  margin-top:4px;
+  font-size:11px;
   color:#bbb;
-  min-height:10px;
+  min-height:12px;
   text-align:center;
 }
 

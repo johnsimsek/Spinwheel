@@ -422,17 +422,6 @@ function openPopup(){
   try { window.parent.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) {}
 }
 
-function closePopup(){
-  overlayBg.classList.remove("show");
-  setTimeout(() => {
-    overlayBg.style.display = "none";
-    // Piilotetaan varmuudeksi myös tila-overlay / Ensure status overlay is also hidden
-    if (centerStatusOverlay) {
-      centerStatusOverlay.classList.remove("show");
-    }
-  }, 250);
-}
-
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", openPopup);
 } else {
@@ -551,9 +540,13 @@ hiddenIframe.addEventListener("load", () => {
   centerStatusText.textContent = "Liittynyt ✅";
   
   setTimeout(() => {
-    centerStatusOverlay.classList.remove("show");
-    closePopup();
-  }, 1200);
+    try {
+      window.parent.postMessage('closeTattooPopup', '*');
+    } catch (e) {}
+    
+    // Ohjaa suoraan ana sivuun / Directs back to main site cleanly
+    window.top.location.href = "https://www.inkyvibestattoo.com/";
+  }, 1000);
 
   emailInput.value = "";
 });

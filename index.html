@@ -1,4 +1,3 @@
-<!-- /index.html -->
 <!DOCTYPE html>
 <html lang="fi">
 <head>
@@ -71,7 +70,6 @@ body{
 .box{
   width:100%;
   background:#141420;
-  /* Kutu içi boşlukları (padding) daraltıldı */
   padding:10px 14px;
   border-radius:18px;
   box-shadow:0 30px 80px rgba(0,0,0,.75);
@@ -80,7 +78,6 @@ body{
   color:#fff;
 }
 
-/* Başlık fontu ve boşlukları küçültüldü */
 h2{ text-align:center; margin:0 0 6px; font-size:20px; }
 
 .imgWrap{
@@ -93,7 +90,6 @@ h2{ text-align:center; margin:0 0 6px; font-size:20px; }
   display:flex;
   align-items:center;
   justify-content:center;
-  /* Fotoğraf alanı Orijinal boyutuna (52vh) geri alındı */
   max-height:52vh;
 }
 
@@ -123,7 +119,6 @@ img.show{ opacity:1; }
   pointer-events:auto;
   border:none;
   border-radius:12px;
-  /* İç buton boşlukları daraltıldı */
   padding:8px 14px;
   font-size:14px;
   font-weight:800;
@@ -143,9 +138,10 @@ img.show{ opacity:1; }
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:10px;
+  gap:12px;
   letter-spacing:.9px;
   text-transform:uppercase;
+  padding: 10px 16px;
 }
 #spinBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; }
 
@@ -155,11 +151,11 @@ img.show{ opacity:1; }
 }
 
 .spinWheel{
-  width:28px;
-  height:28px;
+  width:38px;
+  height:38px;
   border-radius:999px;
   position:relative;
-  flex:0 0 28px;
+  flex:0 0 38px;
   background:
     conic-gradient(
       from 0deg,
@@ -181,7 +177,7 @@ img.show{ opacity:1; }
 .spinWheel::before{
   content:"";
   position:absolute;
-  inset:7px;
+  inset:9px;
   border-radius:999px;
   background: radial-gradient(circle at 30% 25%, #ffffff 0%, #d8d8d8 45%, #bcbcbc 100%);
   box-shadow:
@@ -192,13 +188,13 @@ img.show{ opacity:1; }
 .spinWheel::after{
   content:"";
   position:absolute;
-  top:-4px;
+  top:-5px;
   left:50%;
   transform:translateX(-50%);
   width:0;height:0;
-  border-left:5px solid transparent;
-  border-right:5px solid transparent;
-  border-bottom:8px solid rgba(0,0,0,.85);
+  border-left:6px solid transparent;
+  border-right:6px solid transparent;
+  border-bottom:10px solid rgba(0,0,0,.85);
   filter: drop-shadow(0 2px 1px rgba(0,0,0,.15));
 }
 
@@ -219,7 +215,6 @@ img.show{ opacity:1; }
   letter-spacing:.5px;
 }
 
-/* Alt yazı boyutu ve boşluğu minimuma indirildi */
 .subscribe{
   margin-top:6px;
   font-size:10.5px;
@@ -228,7 +223,6 @@ img.show{ opacity:1; }
   line-height:1.2;
 }
 
-/* Form boşlukları küçültüldü */
 form{ margin-top:6px; }
 
 .inputLabel{
@@ -240,7 +234,6 @@ form{ margin-top:6px; }
   text-align:left;
 }
 
-/* İnput alanı inceltildi */
 input{
   width:100%;
   padding:8px 10px;
@@ -250,7 +243,6 @@ input{
   outline:none;
 }
 
-/* Kayıt ol butonu inceltildi */
 .kirjaudu{
   width:100%;
   padding:8px 12px;

@@ -56,11 +56,14 @@ body{
 .box{
   width:100%;
   min-height:100%;
-  background:#141420; 
+  /* YENİ: Sidebar menüsü ile aynı koyu cam arka planı eklendi */
+  background: linear-gradient(150deg, rgba(20, 20, 25, 0.85) 0%, rgba(25, 25, 30, 0.82) 50%, rgba(15, 15, 20, 0.88) 100%);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
   padding:16px 20px; 
   border-radius:0; 
   box-shadow:none; 
-  border:none; 
+  border: 1px solid rgba(255, 255, 255, 0.05); 
   overflow:hidden;
   color:#fff;
   display:flex;
@@ -520,7 +523,7 @@ emailForm.addEventListener("submit", async (e) => {
     return;
   }
 
-  // 2. Google Sheets / Backend Kontrolü (Arka planda sessizce yapılır, ekranda "Tarkistetaan" yazmaz)
+  // 2. Google Sheets / Backend Kontrolü
   submitBtn.disabled = true;
   statusEl.textContent = "Liitytään...";
   centerStatusText.textContent = "Liitytään...";
